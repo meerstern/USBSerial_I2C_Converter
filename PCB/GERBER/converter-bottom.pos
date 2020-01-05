@@ -1,0 +1,15 @@
+### Module positions - created on 2020/01/01 10:54:52 ###
+### Printed by Pcbnew version kicad (5.1.2)-1
+## Unit = mm, Angle = deg.
+## Side : bottom
+# Ref     Val       Package                        PosX       PosY       Rot  Side
+C1        0.1u      C_0603_1608Metric         -102.4000  -140.1120   90.0000  bottom
+C2        0.1u      C_0603_1608Metric         -113.4000  -141.2880   90.0000  bottom
+R1        27        R_0603_1608Metric         -110.2880  -145.5000    0.0000  bottom
+R3        27        R_0603_1608Metric         -105.6880  -145.5000    0.0000  bottom
+R4        27        R_0603_1608Metric         -109.3000  -135.9620  270.0000  bottom
+R5        27        R_0603_1608Metric         -105.7000  -135.9500  270.0000  bottom
+R6        1.5k      R_0603_1608Metric         -107.5000  -135.9500  270.0000  bottom
+R7        10k       R_0603_1608Metric         -111.1200  -135.9575  270.0000  bottom
+U2        PL2303SA  SOIC-8_3.9x4.9mm_P1.27mm  -107.9000  -141.4000    0.0000  bottom
+## End

@@ -1,0 +1,7 @@
+(fp_lib_table
+  (lib (name mUSB)(type KiCad)(uri ${KIPRJMOD}/mUSB.pretty)(options "")(descr ""))
+  (lib (name SW)(type KiCad)(uri ${KIPRJMOD}/SW.pretty)(options "")(descr ""))
+  (lib (name DPDT_SMD)(type KiCad)(uri ${KIPRJMOD}/DPDT_SMD.pretty)(options "")(descr ""))
+  (lib (name DPDTSW)(type KiCad)(uri ${KIPRJMOD}/DPDTSW.pretty)(options "")(descr ""))
+  (lib (name GroveCon)(type KiCad)(uri ${KIPRJMOD}/GroveCon.pretty)(options "")(descr ""))
+)

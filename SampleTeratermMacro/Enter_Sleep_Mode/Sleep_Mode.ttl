@@ -1,0 +1,6 @@
+setdebug 2
+mpause 30
+send $5A$5A$A5$50
+mpause 30
+setdebug 0
+mpause 30

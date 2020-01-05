@@ -1,0 +1,19 @@
+### Module positions - created on 2020/01/01 10:54:52 ###
+### Printed by Pcbnew version kicad (5.1.2)-1
+## Unit = mm, Angle = deg.
+## Side : top
+# Ref     Val                              Package                        PosX       PosY       Rot  Side
+C4        0.1u                             C_0603_1608Metric          114.0000  -143.4880   90.0000  top
+C10       10u                              C_0805_2012Metric          101.8000  -136.3620  270.0000  top
+C11       0.01u                            C_0603_1608Metric          106.7880  -139.1000    0.0000  top
+C12       10u                              C_0805_2012Metric          108.0000  -136.4620  270.0000  top
+D1        LED                              LED_0603_1608Metric        101.8000  -129.2880   90.0000  top
+M1        MICRO-USB-ZX62R-B-5P-con-hirose  CONN-10118194-0001LF-FCI   108.0000  -128.0000  180.0000  top
+PT1       femtoSMDC035F-02_                R_0603_1608Metric          114.1000  -131.0880   90.0000  top
+R2        1k                               R_0603_1608Metric          101.8000  -132.4880  270.0000  top
+R8        4.7k                             R_0603_1608Metric          102.2000  -148.0120  270.0000  top
+R9        4.7k                             R_0603_1608Metric          114.0000  -148.2875  270.0000  top
+SW1       SW_SPDT                          DPDT_SMD                   110.8000  -139.0000   90.0000  top
+U1        LD3985M33R                       SOT-23-5                   104.9000  -136.4000    0.0000  top
+U3        SC18IM700                        TSSOP-16_4.4x5mm_P0.65mm   108.9000  -144.1000    0.0000  top
+## End

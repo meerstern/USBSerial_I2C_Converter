@@ -1,0 +1,41 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;	Teraterm I2C Search
+;   Crescent
+;   191220	v1.0
+;
+;   F1: No Device,else Found
+;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+setdebug 0
+mpause 30
+dispstr 'START'#$0A#$0D
+mpause 30
+setdebug 2
+mpause 30
+for i 3 127
+	mpause 5	;Wait
+	send $53
+	send i*2
+	send $01
+	send $00
+	send $53
+	send i*2+1
+	send $01
+	send $50
+	mpause 30	;Wait
+	send $52$0A$50
+	mpause 30	;Wait
+	dispstr ''i*2
+	mpause 30	;Wait
+	setdebug 0
+	mpause 5	;Wait
+	dispstr ','#$0A#$0D
+	mpause 30	;Wait
+	setdebug 2
+next
+setdebug 0
+mpause 50	;Wait
+dispstr 'END'#$0A#$0D
+
+

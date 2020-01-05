@@ -1,0 +1,6 @@
+setdebug 2
+mpause 300
+send $52$0A$50
+mpause 300
+setdebug 0
+mpause 300

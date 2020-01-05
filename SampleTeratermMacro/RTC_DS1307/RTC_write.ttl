@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;	Teraterm I2C DS1307 Write
+;   Crescent
+;   191220	v1.0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+setdebug 0
+mpause 100
+dispstr ''#$0A#$0D
+dispstr 'Write to RTC'#$0A#$0D
+setdebug 2
+mpause 100
+;                 ss mm hh ww DD MM YY
+send $53$D0$08$00$1E$06$09$04$01$01$20$50
+;Please send time and day as hex not dec.
+;26->$1A
+;ww-> Sun:1,Mon:2,Tue:3,Wed:4,Thu:5,Fri:6,Sat:7
+mpause 500
+setdebug 0
+mpause 100

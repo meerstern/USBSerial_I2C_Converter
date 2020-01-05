@@ -1,0 +1,20 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;
+;	Teraterm I2C DS1307 Read
+;   Crescent
+;   191220	v1.0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+setdebug 0
+mpause 100
+dispstr ''#$0A#$0D
+dispstr 'NOW'#$0A#$0D
+dispstr ' S  M  H  W  D  M  Y'#$0A#$0D
+mpause 100
+setdebug 2
+send $53$D0$01$00$53$D1$07$50
+;send $53$79$07$50
+mpause 500
+;send $52$A$50
+;mpause 100
+setdebug 0
+mpause 100

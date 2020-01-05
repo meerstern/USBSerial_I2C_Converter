@@ -1,0 +1,40 @@
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;TEMP & HUMD SENSOR SHT31 W:0x88,R:0x89
+;	Teraterm Driver Crescent
+;   191220	v1.0
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;
+setdebug 2	;	hex mode
+mpause 10	;	10ms delay
+;;Soft Reset
+send $53$88$02$30$A2$50
+mpause 50	;	delay
+send $53$88$02$30$41$50
+mpause 50	;	delay
+;;Heater OFF
+send $53$88$02$30$66$50
+;;Heter ON
+;send $53$88$02$30$6D$50
+;send $52$0A$50
+mpause 100	;	delay
+setdebug 0
+mpause 10	; 	delay
+dispstr ' '#$0A#$0D
+dispstr 'INIT OK '#$0A#$0D
+mpause 30	; 	delay
+setdebug 2
+:loop
+	send $53$88$02$24$00$50
+	mpause 300	;	300ms delay
+	send $53$89$06$50
+	mpause 300	;	300ms delay
+	setdebug 0
+	mpause 50	;Wait
+	dispstr ','#$0A#$0D
+	mpause 50	;Wait
+	setdebug 2
+	mpause 50	;Wait
+goto loop
+
+
+
