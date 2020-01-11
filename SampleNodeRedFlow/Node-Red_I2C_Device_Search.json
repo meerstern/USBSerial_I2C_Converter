@@ -1,0 +1,269 @@
+[
+    {
+        "id": "f1502b47.5049b8",
+        "type": "tab",
+        "label": "フロー 7",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "f915bc46.8d4d5",
+        "type": "switch",
+        "z": "f1502b47.5049b8",
+        "name": "i<0xFF",
+        "property": "i",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "255",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 514.75,
+        "y": 378.75,
+        "wires": [
+            [
+                "b141907a.37e94"
+            ],
+            [
+                "adef6629.66048"
+            ]
+        ]
+    },
+    {
+        "id": "7e6a1131.d6941",
+        "type": "function",
+        "z": "f1502b47.5049b8",
+        "name": "i++",
+        "func": "msg.i=msg.i+2;\nglobal.set(\"LOOP_i\",msg.i);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 791.75,
+        "y": 224.75,
+        "wires": [
+            [
+                "f915bc46.8d4d5"
+            ]
+        ]
+    },
+    {
+        "id": "63876d64.4dfe0c",
+        "type": "debug",
+        "z": "f1502b47.5049b8",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 834.75,
+        "y": 512.75,
+        "wires": []
+    },
+    {
+        "id": "67f9284e.cab2a",
+        "type": "inject",
+        "z": "f1502b47.5049b8",
+        "name": "Start",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 202.64581298828125,
+        "y": 378.638916015625,
+        "wires": [
+            [
+                "73c19077.9a3c38",
+                "5436d201.98d854"
+            ]
+        ]
+    },
+    {
+        "id": "6b771d6e.a7a494",
+        "type": "comment",
+        "z": "f1502b47.5049b8",
+        "name": "I2C Search",
+        "info": "",
+        "x": 307.9166564941406,
+        "y": 283.3056116104126,
+        "wires": []
+    },
+    {
+        "id": "adef6629.66048",
+        "type": "template",
+        "z": "f1502b47.5049b8",
+        "name": "End",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Device Search End",
+        "x": 688.988037109375,
+        "y": 511.6190185546875,
+        "wires": [
+            [
+                "63876d64.4dfe0c"
+            ]
+        ]
+    },
+    {
+        "id": "da74ef20.ca4398",
+        "type": "template",
+        "z": "f1502b47.5049b8",
+        "name": "\"i bit\"",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{i}}回目",
+        "x": 1124.75,
+        "y": 372.75,
+        "wires": [
+            [
+                "7e6a1131.d6941"
+            ]
+        ]
+    },
+    {
+        "id": "b141907a.37e94",
+        "type": "function",
+        "z": "f1502b47.5049b8",
+        "name": "Check Device",
+        "func": "var buf = new Buffer(11); \n\nvar i= global.get(\"LOOP_i\");\n\nbuf[0]=0x53;//start\nbuf[1]=i;//i2c addr (0x68<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=i+1;//i2c addr (0x68<1)+1, write addr+1 = read addr\nbuf[6]=0x01;//recieve data 2\nbuf[7]=0x50;//stop\nbuf[8]=0x52;//start\nbuf[9]=0x0A;//i2c addr (0x68<1)\nbuf[10]=0x50;//send data 1\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 703.75,
+        "y": 368.25,
+        "wires": [
+            [
+                "1af10f1f.252271"
+            ]
+        ]
+    },
+    {
+        "id": "1af10f1f.252271",
+        "type": "serial request",
+        "z": "f1502b47.5049b8",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 915.75,
+        "y": 367.75,
+        "wires": [
+            [
+                "da74ef20.ca4398",
+                "d5962019.030838"
+            ]
+        ]
+    },
+    {
+        "id": "d5962019.030838",
+        "type": "function",
+        "z": "f1502b47.5049b8",
+        "name": "Check Response",
+        "func": "if(msg.payload[0]!=0xF1){\n    \n    var i= global.get(\"LOOP_i\");\n    var raddr=i>>1;\n    var waddr=(i>>1)+1;\n    msg.payload=\"Found Device : 0x\" + i.toString(16) + \",  Read Addr: 0x\" +raddr.toString(16)+ \",  Write Addr: 0x\" +waddr.toString(16);\n    return msg;\n    \n}",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1067.75,
+        "y": 453.75,
+        "wires": [
+            [
+                "18dc8c9e.bdf0bb"
+            ]
+        ]
+    },
+    {
+        "id": "73c19077.9a3c38",
+        "type": "function",
+        "z": "f1502b47.5049b8",
+        "name": "i=2",
+        "func": "\nmsg.i=2;\nglobal.set(\"LOOP_i\",msg.i);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 354.86669921875,
+        "y": 378.75,
+        "wires": [
+            [
+                "f915bc46.8d4d5"
+            ]
+        ]
+    },
+    {
+        "id": "18dc8c9e.bdf0bb",
+        "type": "debug",
+        "z": "f1502b47.5049b8",
+        "name": "途中",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1249.25,
+        "y": 453.75,
+        "wires": []
+    },
+    {
+        "id": "4ef78ec2.da42b",
+        "type": "debug",
+        "z": "f1502b47.5049b8",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 433.75,
+        "y": 513.75,
+        "wires": []
+    },
+    {
+        "id": "5436d201.98d854",
+        "type": "template",
+        "z": "f1502b47.5049b8",
+        "name": "Start",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "Device Search Start!! Please wait for seconds...",
+        "x": 287.988037109375,
+        "y": 512.6190185546875,
+        "wires": [
+            [
+                "4ef78ec2.da42b"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]

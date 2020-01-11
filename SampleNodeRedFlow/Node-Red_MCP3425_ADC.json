@@ -1,0 +1,120 @@
+[
+    {
+        "id": "4380b104.7d0a28",
+        "type": "tab",
+        "label": "フロー 6",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "1463a785.8cb6a8",
+        "type": "serial request",
+        "z": "4380b104.7d0a28",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 702.86669921875,
+        "y": 308.75,
+        "wires": [
+            [
+                "f32e010a.e3a73"
+            ]
+        ]
+    },
+    {
+        "id": "8601c3af.31b9e",
+        "type": "function",
+        "z": "4380b104.7d0a28",
+        "name": "ADC Read",
+        "func": "var buf = new Buffer(8); \n\nvar gain=0b00;  //GAIN 00:x1, 01:x2, 10:x4, 11:x8\nvar reso=0b10;  //ADC Bit 00:12bit, 01:14bit, 10:16bit\nvar cont=0b1;   //ADC Mode 0:One shot, 1:Continuos\nvar ready=0b1;   //Ready bit\n\nvar cfg = gain + (reso<<2) + (cont<<4) + (ready<<7);\n\n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=cfg;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0xD1;//i2c addr (0x68<1)+1, write addr+1 = read addr\nbuf[6]=0x02;//recieve data 2\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 520.88330078125,
+        "y": 306.5,
+        "wires": [
+            [
+                "1463a785.8cb6a8"
+            ]
+        ]
+    },
+    {
+        "id": "b17f5920.33a61",
+        "type": "inject",
+        "z": "4380b104.7d0a28",
+        "name": "",
+        "topic": "MCP3425 ADC Read",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 279,
+        "y": 207.75,
+        "wires": [
+            [
+                "8601c3af.31b9e"
+            ]
+        ]
+    },
+    {
+        "id": "f32e010a.e3a73",
+        "type": "function",
+        "z": "4380b104.7d0a28",
+        "name": "受信データ数式変換",
+        "func": "var res={bit:0,val:0.0};\n\n\nvar sign = msg.payload[0] & (1 << 7);\nvar resbit = (((msg.payload[0] & 0xFF) << 8) | (msg.payload[1] & 0xFF));\nif (sign) {\n   resbit = 0xFFFF0000 | resbit;  // fill in most significant bits with 1's\n}\n\nvar resval = resbit*2.048/32767.0;\n\nres.bit =\"0x\"+ ((msg.payload[0] << 8) | (msg.payload[1] )).toString(16);\nres.val=Math.round(1000*resval)/1000;\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590.75,
+        "y": 443.5,
+        "wires": [
+            [
+                "36fb5507.d69a4a"
+            ]
+        ]
+    },
+    {
+        "id": "b27414de.48a7a",
+        "type": "comment",
+        "z": "4380b104.7d0a28",
+        "name": "MCP3425 16bitADCサンプル",
+        "info": "",
+        "x": 295.75,
+        "y": 131.75,
+        "wires": []
+    },
+    {
+        "id": "36fb5507.d69a4a",
+        "type": "debug",
+        "z": "4380b104.7d0a28",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 866.86669921875,
+        "y": 443.5,
+        "wires": []
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]

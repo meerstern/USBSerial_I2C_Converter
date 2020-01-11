@@ -1,0 +1,703 @@
+[
+    {
+        "id": "b6ac44ac.433498",
+        "type": "tab",
+        "label": "フロー 5",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "fe1a8f4e.368d1",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "初期化コマンド1",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x38;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 584.13330078125,
+        "y": 198,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "783faa7b.67add4"
+            ]
+        ]
+    },
+    {
+        "id": "fd2962a0.e43a6",
+        "type": "inject",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "topic": "初期化",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 276.25,
+        "y": 199.25,
+        "wires": [
+            [
+                "fe1a8f4e.368d1"
+            ]
+        ]
+    },
+    {
+        "id": "426c7025.76cd18",
+        "type": "comment",
+        "z": "b6ac44ac.433498",
+        "name": "AQM1602 サンプル",
+        "info": "",
+        "x": 178,
+        "y": 88,
+        "wires": []
+    },
+    {
+        "id": "cac54712.237b28",
+        "type": "serial out",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 1059.75,
+        "y": 384.75,
+        "wires": []
+    },
+    {
+        "id": "783faa7b.67add4",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 391.8666687011719,
+        "y": 262.75,
+        "wires": [
+            [
+                "c973d709.fab17"
+            ]
+        ]
+    },
+    {
+        "id": "c973d709.fab17",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "初期化コマンド2、拡張コマンド",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x39;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 630.75,
+        "y": 258.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "993deccd.76907"
+            ]
+        ]
+    },
+    {
+        "id": "993deccd.76907",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 392.75,
+        "y": 349.75,
+        "wires": [
+            [
+                "8572f326.028f08"
+            ]
+        ]
+    },
+    {
+        "id": "8572f326.028f08",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "拡張コマンド内部周波数設定",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x14;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 612.6333312988281,
+        "y": 346.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "bdb36b7d.ced048"
+            ]
+        ]
+    },
+    {
+        "id": "bdb36b7d.ced048",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 393.75,
+        "y": 408.75,
+        "wires": [
+            [
+                "7400e481.e07fcc"
+            ]
+        ]
+    },
+    {
+        "id": "7400e481.e07fcc",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "拡張コマンドコントラスト設定",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x78;//cmd data   contrast 0x70~0x7F\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 623.6333312988281,
+        "y": 409.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "e3b96013.ecddb8"
+            ]
+        ]
+    },
+    {
+        "id": "e3b96013.ecddb8",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 395.75,
+        "y": 466.75,
+        "wires": [
+            [
+                "d474084b.57e528"
+            ]
+        ]
+    },
+    {
+        "id": "d474084b.57e528",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "拡張コマンド電源、コントラスト設定",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x56;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 648.6333312988281,
+        "y": 469.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "a0c14c65.271cd"
+            ]
+        ]
+    },
+    {
+        "id": "a0c14c65.271cd",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 394.75,
+        "y": 527.75,
+        "wires": [
+            [
+                "a50cfc56.f55d6"
+            ]
+        ]
+    },
+    {
+        "id": "a50cfc56.f55d6",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "拡張コマンドフォロア設定",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x6c;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 618.6333312988281,
+        "y": 526.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "cf7e24de.009f58"
+            ]
+        ]
+    },
+    {
+        "id": "cf7e24de.009f58",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "200",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 390.75,
+        "y": 596.75,
+        "wires": [
+            [
+                "349b1b.720564e6"
+            ]
+        ]
+    },
+    {
+        "id": "349b1b.720564e6",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "拡張コマンド終了",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x38;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 590.6333312988281,
+        "y": 594.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "db58bb4.fb82848"
+            ]
+        ]
+    },
+    {
+        "id": "db58bb4.fb82848",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 389.75,
+        "y": 653.75,
+        "wires": [
+            [
+                "70558ad4.2e4ce4"
+            ]
+        ]
+    },
+    {
+        "id": "693d032e.2c924c",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "ディスプレイON",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x0c;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 582.63330078125,
+        "y": 723.75,
+        "wires": [
+            [
+                "cac54712.237b28"
+            ]
+        ]
+    },
+    {
+        "id": "75c8e468.2a2364",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 388.75,
+        "y": 722.75,
+        "wires": [
+            [
+                "693d032e.2c924c"
+            ]
+        ]
+    },
+    {
+        "id": "70558ad4.2e4ce4",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "表示クリア",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//cmd\nbuf[4]=0x01;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 574.63330078125,
+        "y": 658.75,
+        "wires": [
+            [
+                "cac54712.237b28",
+                "75c8e468.2a2364"
+            ]
+        ]
+    },
+    {
+        "id": "8e1568bc.f3b47",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "ホーム",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data num\nbuf[3]=0x00;//cmd\nbuf[4]=0x01;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 529.75,
+        "y": 814.25,
+        "wires": [
+            [
+                "dcc4dfaa.0f0a9",
+                "e8735b5e.d1feb"
+            ]
+        ]
+    },
+    {
+        "id": "c9b548c6.5f4908",
+        "type": "inject",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "topic": "1行目文字列書き込み",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 311.86669921875,
+        "y": 815.5,
+        "wires": [
+            [
+                "8e1568bc.f3b47"
+            ]
+        ]
+    },
+    {
+        "id": "dcc4dfaa.0f0a9",
+        "type": "serial out",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 946.75,
+        "y": 813.25,
+        "wires": []
+    },
+    {
+        "id": "e43b446e.61adb8",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "8文字",
+        "func": "var buf = new Buffer(13); //FIFO size max16 \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x09;//send data num\nbuf[3]=0x40;//data\nbuf[4]='a'.charCodeAt(0);\nbuf[5]='b'.charCodeAt(0);\nbuf[6]='c'.charCodeAt(0);\nbuf[7]='d'.charCodeAt(0);\nbuf[8]='e'.charCodeAt(0);\nbuf[9]='f'.charCodeAt(0);\nbuf[10]='g'.charCodeAt(0);\nbuf[11]='h'.charCodeAt(0);\nbuf[12]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 717.75,
+        "y": 862.75,
+        "wires": [
+            [
+                "dcc4dfaa.0f0a9",
+                "4c3e40a6.13585"
+            ]
+        ]
+    },
+    {
+        "id": "e8735b5e.d1feb",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 564.75,
+        "y": 859.75,
+        "wires": [
+            [
+                "e43b446e.61adb8"
+            ]
+        ]
+    },
+    {
+        "id": "4c3e40a6.13585",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 569.75,
+        "y": 919.25,
+        "wires": [
+            [
+                "aedc388b.2ae128"
+            ]
+        ]
+    },
+    {
+        "id": "aedc388b.2ae128",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "8文字",
+        "func": "var buf = new Buffer(13); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x09;//send data num\nbuf[3]=0x40;//data\nbuf[4]='i'.charCodeAt(0);\nbuf[5]='j'.charCodeAt(0);\nbuf[6]='k'.charCodeAt(0);\nbuf[7]='l'.charCodeAt(0);\nbuf[8]='m'.charCodeAt(0);\nbuf[9]='n'.charCodeAt(0);\nbuf[10]='o'.charCodeAt(0);\nbuf[11]='p'.charCodeAt(0);\nbuf[12]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 720.75,
+        "y": 919.25,
+        "wires": [
+            [
+                "dcc4dfaa.0f0a9"
+            ]
+        ]
+    },
+    {
+        "id": "97b6b590.8ede8",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "ホーム",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data num\nbuf[3]=0x00;//cmd\nbuf[4]=0xc0;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 530.75,
+        "y": 986.25,
+        "wires": [
+            [
+                "4c5b6c7.f0bb094",
+                "e9fa63b3.31d7e"
+            ]
+        ]
+    },
+    {
+        "id": "73a7e500.f26d94",
+        "type": "inject",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "topic": "2行目文字列書き込み",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 312.86669921875,
+        "y": 987.5,
+        "wires": [
+            [
+                "97b6b590.8ede8"
+            ]
+        ]
+    },
+    {
+        "id": "4c5b6c7.f0bb094",
+        "type": "serial out",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 947.75,
+        "y": 985.25,
+        "wires": []
+    },
+    {
+        "id": "134b3504.42ca73",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "8文字",
+        "func": "var buf = new Buffer(13); //max16 FIFO\nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x09;//send data num\nbuf[3]=0x40;//data\nbuf[4]='q'.charCodeAt(0);\nbuf[5]='r'.charCodeAt(0);\nbuf[6]='s'.charCodeAt(0);\nbuf[7]='t'.charCodeAt(0);\nbuf[8]='u'.charCodeAt(0);\nbuf[9]='v'.charCodeAt(0);\nbuf[10]='w'.charCodeAt(0);\nbuf[11]='x'.charCodeAt(0);\nbuf[12]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 718.75,
+        "y": 1034.75,
+        "wires": [
+            [
+                "4c5b6c7.f0bb094",
+                "579e2308.119934"
+            ]
+        ]
+    },
+    {
+        "id": "e9fa63b3.31d7e",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 565.75,
+        "y": 1031.75,
+        "wires": [
+            [
+                "134b3504.42ca73"
+            ]
+        ]
+    },
+    {
+        "id": "579e2308.119934",
+        "type": "delay",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 570.75,
+        "y": 1091.25,
+        "wires": [
+            [
+                "876b7de2.633ae"
+            ]
+        ]
+    },
+    {
+        "id": "876b7de2.633ae",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "8文字",
+        "func": "var buf = new Buffer(13); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x09;//send data num\nbuf[3]=0x40;//data\nbuf[4]='y'.charCodeAt(0);\nbuf[5]='z'.charCodeAt(0);\nbuf[6]='0'.charCodeAt(0);\nbuf[7]='1'.charCodeAt(0);\nbuf[8]='2'.charCodeAt(0);\nbuf[9]='3'.charCodeAt(0);\nbuf[10]='4'.charCodeAt(0);\nbuf[11]='5'.charCodeAt(0);\nbuf[12]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 721.75,
+        "y": 1091.25,
+        "wires": [
+            [
+                "4c5b6c7.f0bb094"
+            ]
+        ]
+    },
+    {
+        "id": "aeff56ab.d3711",
+        "type": "inject",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "topic": "クリア",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 256.5,
+        "y": 1145.25,
+        "wires": [
+            [
+                "18a147b2.a8eb1"
+            ]
+        ]
+    },
+    {
+        "id": "783fb6d4.36f618",
+        "type": "serial out",
+        "z": "b6ac44ac.433498",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 943.5,
+        "y": 1157.25,
+        "wires": []
+    },
+    {
+        "id": "18a147b2.a8eb1",
+        "type": "function",
+        "z": "b6ac44ac.433498",
+        "name": "表示クリア",
+        "func": "var buf = new Buffer(6); \nbuf[0]=0x53;//start\nbuf[1]=0x7c;//i2c addr (0x3e<1)\nbuf[2]=0x02;//send data num\nbuf[3]=0x00;//cmd\nbuf[4]=0x01;//cmd data\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 577.5,
+        "y": 1163.25,
+        "wires": [
+            [
+                "783fb6d4.36f618"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM5",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
