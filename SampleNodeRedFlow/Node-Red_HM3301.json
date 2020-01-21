@@ -1,0 +1,258 @@
+[
+    {
+        "id": "6439f075.8debb",
+        "type": "tab",
+        "label": "フロー 9",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "2b6aea09.db8a5e",
+        "type": "debug",
+        "z": "6439f075.8debb",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1100.11669921875,
+        "y": 516.5,
+        "wires": []
+    },
+    {
+        "id": "2651d880.504d78",
+        "type": "serial request",
+        "z": "6439f075.8debb",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 661.11669921875,
+        "y": 420.25,
+        "wires": [
+            [
+                "f693da6a.44f7f8"
+            ]
+        ]
+    },
+    {
+        "id": "fafa9d47.afcc9",
+        "type": "function",
+        "z": "6439f075.8debb",
+        "name": "測定値読み込み",
+        "func": "var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x80;//i2c addr\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//\nbuf[4]=0x53;//restart\nbuf[5]=0x81;//i2c addr \nbuf[6]=0x1d;//recieve data 8\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 472.1332702636719,
+        "y": 416,
+        "wires": [
+            [
+                "2651d880.504d78"
+            ]
+        ]
+    },
+    {
+        "id": "912316a4.cd6558",
+        "type": "inject",
+        "z": "6439f075.8debb",
+        "name": "",
+        "topic": "読み込み",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 204.24996948242188,
+        "y": 416.25,
+        "wires": [
+            [
+                "fafa9d47.afcc9"
+            ]
+        ]
+    },
+    {
+        "id": "f693da6a.44f7f8",
+        "type": "function",
+        "z": "6439f075.8debb",
+        "name": "受信データ数式変換",
+        "func": "var res={pm1_0:0,pm2_5:0,pm10:0};\n\nres.pm1_0 = (msg.payload[4]<<8)+(msg.payload[5]);\nres.pm2_5 = (msg.payload[6]<<8)+(msg.payload[7]);\nres.pm10 = (msg.payload[8]<<8)+(msg.payload[9]);\n\n\n\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 848,
+        "y": 549,
+        "wires": [
+            [
+                "2b6aea09.db8a5e"
+            ]
+        ]
+    },
+    {
+        "id": "6f8721ca.256b6",
+        "type": "inject",
+        "z": "6439f075.8debb",
+        "name": "",
+        "topic": "初期化",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 197,
+        "y": 130,
+        "wires": [
+            [
+                "15e2299c.daeb86"
+            ]
+        ]
+    },
+    {
+        "id": "3d94eccf.3f9b74",
+        "type": "comment",
+        "z": "6439f075.8debb",
+        "name": "HM3301 サンプル",
+        "info": "",
+        "x": 222.00003051757812,
+        "y": 81,
+        "wires": []
+    },
+    {
+        "id": "15e2299c.daeb86",
+        "type": "function",
+        "z": "6439f075.8debb",
+        "name": "セレクトコマンド",
+        "func": "var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x80;//i2c addr\nbuf[2]=0x01;//send data 1\nbuf[3]=0x88;//\nbuf[4]=0x53;//restart\nbuf[5]=0x81;//i2c addr \nbuf[6]=0x01;//recieve data 8\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 424.75,
+        "y": 131.75,
+        "wires": [
+            [
+                "e159a8de.4cb17"
+            ]
+        ]
+    },
+    {
+        "id": "e159a8de.4cb17",
+        "type": "serial request",
+        "z": "6439f075.8debb",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 624.75,
+        "y": 136.75,
+        "wires": [
+            [
+                "29fcd249.b8ede6",
+                "3f7c2741.ff064"
+            ]
+        ]
+    },
+    {
+        "id": "3f7c2741.ff064",
+        "type": "debug",
+        "z": "6439f075.8debb",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1140.75,
+        "y": 235.75,
+        "wires": []
+    },
+    {
+        "id": "29fcd249.b8ede6",
+        "type": "switch",
+        "z": "6439f075.8debb",
+        "name": "!=0",
+        "property": "payload[0]",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 760.75,
+        "y": 201.75,
+        "wires": [
+            [
+                "c6f54244.6f91f8"
+            ],
+            [
+                "faabaeee.6fd8b"
+            ]
+        ]
+    },
+    {
+        "id": "c6f54244.6f91f8",
+        "type": "delay",
+        "z": "6439f075.8debb",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "100",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 595.75,
+        "y": 260.75,
+        "wires": [
+            [
+                "15e2299c.daeb86"
+            ]
+        ]
+    },
+    {
+        "id": "faabaeee.6fd8b",
+        "type": "template",
+        "z": "6439f075.8debb",
+        "name": "初期化OK",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "初期化完了",
+        "x": 894.75,
+        "y": 259.75,
+        "wires": [
+            [
+                "3f7c2741.ff064"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM17",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
