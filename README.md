@@ -18,6 +18,7 @@ USB Serial I2C Converter
 ## Node-Redサンプルフロー
  * シリアルポートフローを使用して[Grove温湿度センサSHT31][5]から温度、湿度を読み込む[サンプル][4]  
  ※詳細はサンプルコードをご確認ください  
+ ※シリアルポートフローを使用する場合はオンプレミス版Node-Redを使用する必要があります。[こちらの記事][6]を参考にしてください  
  
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/SampleNodeRedFlow/SHT31_Node-Red.jpg" width="360">
 
@@ -35,4 +36,6 @@ USB Serial I2C Converter
 [3]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=229&pcid=41
 [4]: https://github.com/meerstern/USBSerial_I2C_Converter/tree/master/SampleNodeRedFlow
 [5]: https://www.switch-science.com/catalog/2853/
+[6]: http://meerstern.seesaa.net/article/465007276.html
+
 MIT Lisense
