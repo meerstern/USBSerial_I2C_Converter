@@ -19,14 +19,15 @@ USB Serial I2C Converter
  ※詳細はサンプルコードをご確認ください  
  
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/SampleNodeRedFlow/SHT31_Node-Red.jpg" width="360">
- 
+
 ## Teratermサンプルマクロ
  * サンプルマクロを実行する際には必ず言語設定を「English」、「Default.lng」に設定してください。正しく送受信されません。  
 
-  
-<img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/PCB/img1.jpg" width="360">
-<img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/PCB/img2.jpg" width="360">
-  
+
+<img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img1.jpg" width="360">
+<img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img2.jpg" width="360">
+
+
     
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
 [2]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=225&pcid=41
