@@ -17,7 +17,7 @@ USB Serial I2C Converter
 
 ## Node-Redサンプルフロー
  * シリアルポートフローを使用して[Grove温湿度センサSHT31][5]から温度、湿度を読み込む[サンプル][4]  
- * 音湿度センサ　SHT31、I2C接続LCD AQM1602、マルチ環境センサBME280、CO2センサ CCS811、リアルタイムクロック DS1307、AD変換 MCP3425、粒子センサ HM3301、I2Cデバイス検索のサンプルコードがあります  
+ * 温湿度センサ　SHT31、I2C接続LCD AQM1602、マルチ環境センサBME280、CO2センサ CCS811、リアルタイムクロック DS1307、AD変換 MCP3425、粒子センサ HM3301、I2Cデバイス検索のサンプルコードがあります  
  ※詳細はサンプルコードをご確認ください  
  ※シリアルポートフローを使用する場合はオンプレミス版Node-Redを使用する必要があります。[こちらの記事][6]を参考にしてください  
  
@@ -33,8 +33,7 @@ USB Serial I2C Converter
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img1.jpg" width="360">
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img2.jpg" width="360">
 
-
-    
+   
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
 [2]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=225&pcid=41
 [3]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=229&pcid=41
