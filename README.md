@@ -5,10 +5,11 @@ USB Serial I2C Converter
   * USBシリアルをI2Cマスタに変換する基板です
   * シリアルCOMポートを介してI2Cデバイスを制御できます  
   * シリアルCOM変換にPL2303SA、シリアルI2C変換に[SC18IM700][1]を使用しています  
-  * TeratermやNode-Red等から簡単なコマンドを使用してI2Cデバイスを制御できます  
+  * TeratermやNode-Red、Unity、ブラウザ等から簡単なコマンドを使用してI2Cデバイスを制御できます  
   * I2CはGrove互換コネクタを搭載しています  
   * Grove互換コネクタの電源、プルアップ抵抗はスイッチ切り替えで5V/3.3Vに対応しています  
   * 基板のピンヘッダを用いることでSC18IM700単体の変換基板としても使用できます  
+  * アドレスの異なる複数のデバイスを接続する場合は[I2Cハブ][7]を使用してください
   
 ## USBドライバ
  * Windows版は[こちらからダウンロード][2]して使用してください  
@@ -40,5 +41,6 @@ USB Serial I2C Converter
 [4]: https://github.com/meerstern/USBSerial_I2C_Converter/tree/master/SampleNodeRedFlow
 [5]: https://www.switch-science.com/catalog/2853/
 [6]: http://meerstern.seesaa.net/article/465007276.html
+[7]: https://www.switch-science.com/catalog/796/
 
 MIT Lisense
