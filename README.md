@@ -6,7 +6,8 @@ USB Serial I2C Converter
   * シリアルCOMポートを介してI2Cデバイスを制御できます  
   * シリアルCOM変換にPL2303SA、シリアルI2C変換に[SC18IM700][1]を使用しています  
   * シリアルI2C変換[SC18IM700][1]のデフォルトボーレートは9600bpsです  
-  * TeratermやNode-Red、Unity、ブラウザ等から簡単なコマンドを使用してI2Cデバイスを制御できます  
+  * TeratermやNode-Red、Unity等からシリアルCOMポートを介して容易なコマンドでI2Cデバイスを制御できます  
+  * シリアルI2C変換SC18IM700のコマンドは[データシート(PDF)][8]を参照してください  
   * I2CはGrove互換コネクタを搭載しています  
   * Grove互換コネクタの電源、プルアップ抵抗はスイッチ切り替えで5V/3.3Vに対応しています  
   * 基板のピンヘッダを用いることでSC18IM700単体の変換基板としても使用できます  
@@ -44,5 +45,6 @@ USB Serial I2C Converter
 [5]: https://www.switch-science.com/catalog/2853/
 [6]: http://meerstern.seesaa.net/article/465007276.html
 [7]: https://www.switch-science.com/catalog/796/
+[8]: https://www.nxp.com/docs/en/data-sheet/SC18IM700.pdf
 
 MIT Lisense
