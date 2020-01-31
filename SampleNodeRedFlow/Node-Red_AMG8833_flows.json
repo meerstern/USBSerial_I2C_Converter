@@ -1,0 +1,466 @@
+[
+    {
+        "id": "583f89d.19b9d78",
+        "type": "tab",
+        "label": "フロー 12",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "ab26a092.1af098",
+        "type": "switch",
+        "z": "583f89d.19b9d78",
+        "name": "i<8",
+        "property": "i",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "8",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 497.75,
+        "y": 509.75,
+        "wires": [
+            [
+                "9b672e1c.9a7bd8"
+            ],
+            [
+                "17c520e2.28826f"
+            ]
+        ]
+    },
+    {
+        "id": "ef928fd.28819f",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "i++",
+        "func": "msg.i=msg.i+1;\nglobal.set(\"LOOP_i\",msg.i);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 786.75,
+        "y": 438.75,
+        "wires": [
+            [
+                "ab26a092.1af098"
+            ]
+        ]
+    },
+    {
+        "id": "a705948f.df7fb",
+        "type": "inject",
+        "z": "583f89d.19b9d78",
+        "name": "温度取得",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 199.64581298828125,
+        "y": 510.638916015625,
+        "wires": [
+            [
+                "b13fa34c.d33ff8"
+            ]
+        ]
+    },
+    {
+        "id": "819849dc.0dbb38",
+        "type": "comment",
+        "z": "583f89d.19b9d78",
+        "name": "AMG88XX",
+        "info": "",
+        "x": 182.91665649414062,
+        "y": 156.30560302734375,
+        "wires": []
+    },
+    {
+        "id": "1cabb20.32661ce",
+        "type": "template",
+        "z": "583f89d.19b9d78",
+        "name": "\"i bit\"",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{i}}回目",
+        "x": 1107.75,
+        "y": 503.75,
+        "wires": [
+            [
+                "ef928fd.28819f"
+            ]
+        ]
+    },
+    {
+        "id": "9b672e1c.9a7bd8",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "Check Device",
+        "func": "var buf = new Buffer(8); \n\nvar i= global.get(\"LOOP_i\");\n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x80+0x10*i;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0xD0+1;//i2c addr (0x68<1)+1, write addr+1 = read addr\nbuf[6]=0x10;//recieve data 2\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 686.75,
+        "y": 499.25,
+        "wires": [
+            [
+                "49b1ff03.523bb"
+            ]
+        ]
+    },
+    {
+        "id": "49b1ff03.523bb",
+        "type": "serial request",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 898.75,
+        "y": 498.75,
+        "wires": [
+            [
+                "1cabb20.32661ce",
+                "7ceba464.cbb65c"
+            ]
+        ]
+    },
+    {
+        "id": "7ceba464.cbb65c",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "Get Response",
+        "func": "var raw_data = global.get(\"RAW_DATA\");\nvar loop_i = global.get(\"LOOP_i\");\nvar temp = global.get(\"TEMP\");\nvar sign=0;\n\nfor (var i=0; i<8; i++){\n\n\n    raw_data[loop_i][i]=(msg.payload[i*2+1]<<8)+msg.payload[i*2];\n    \n    sign = (raw_data[loop_i][i]&0x800)>>11;\n    if(sign){\n        raw_data[loop_i][i] = -1.0*raw_data[loop_i][i]&0x7FF;\n    }\n    temp[loop_i][i] = raw_data[loop_i][i]*0.25;\n}\n\n\nglobal.set(\"LOOP_i\",loop_i);\nglobal.set(\"TEMP\",temp);\nglobal.set(\"RAW_DATA\",raw_data);\n\nmsg.payload=raw_data;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1052.75,
+        "y": 582.75,
+        "wires": [
+            [
+                "a159e7c5.dffef8"
+            ]
+        ]
+    },
+    {
+        "id": "b13fa34c.d33ff8",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "i=0",
+        "func": "\nmsg.i=0;\n\nvar raw_data = [\n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0],  \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0],\n  [0, 0, 0, 0, 0, 0, 0, 0] \n];\n\nvar temp = [\n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0], \n  [0, 0, 0, 0, 0, 0, 0, 0]\n    \n    \n];\n\nglobal.set(\"LOOP_i\",msg.i);\nglobal.set(\"RAW_DATA\",raw_data);\nglobal.set(\"TEMP\",temp);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 337.86669921875,
+        "y": 509.75,
+        "wires": [
+            [
+                "ab26a092.1af098"
+            ]
+        ]
+    },
+    {
+        "id": "a159e7c5.dffef8",
+        "type": "debug",
+        "z": "583f89d.19b9d78",
+        "name": "途中",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1232.25,
+        "y": 584.75,
+        "wires": []
+    },
+    {
+        "id": "389b93dd.a204bc",
+        "type": "debug",
+        "z": "583f89d.19b9d78",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 861.75,
+        "y": 701.75,
+        "wires": []
+    },
+    {
+        "id": "17c520e2.28826f",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "Get Response",
+        "func": "// temp = global.get(\"RAW_DATA\");\nvar temp = global.get(\"TEMP\");\nmsg.payload=temp;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 687.75,
+        "y": 702.75,
+        "wires": [
+            [
+                "389b93dd.a204bc",
+                "4c280b19.4077bc"
+            ]
+        ]
+    },
+    {
+        "id": "b2bb7f57.46da88",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "初期化コマンド1",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x00;//AMG88xx_PCTL:0x00\nbuf[4]=0x00;//AMG88xx_NORMAL_MODE:0x00\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 549.75,
+        "y": 221.75,
+        "wires": [
+            [
+                "e05bb725.dc0578",
+                "cfcfe18a.883dd"
+            ]
+        ]
+    },
+    {
+        "id": "41fc6f95.4eb85",
+        "type": "inject",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "topic": "初期化",
+        "payload": "",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 241.86669921875,
+        "y": 223,
+        "wires": [
+            [
+                "b2bb7f57.46da88"
+            ]
+        ]
+    },
+    {
+        "id": "e05bb725.dc0578",
+        "type": "delay",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 357.4833679199219,
+        "y": 286.5,
+        "wires": [
+            [
+                "d2237983.da4d98"
+            ]
+        ]
+    },
+    {
+        "id": "d2237983.da4d98",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "初期化コマンド2",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x01;//AMG88xx_RST:0x01\nbuf[4]=0x3F;//AMG88xx_INITIAL_RESET:0x3F\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 541.36669921875,
+        "y": 287.5,
+        "wires": [
+            [
+                "cfcfe18a.883dd",
+                "4ad94251.f6a56c"
+            ]
+        ]
+    },
+    {
+        "id": "cfcfe18a.883dd",
+        "type": "serial out",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 854.75,
+        "y": 283.75,
+        "wires": []
+    },
+    {
+        "id": "60b0f34.b90980c",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "初期化コマンド4",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x02;//AMG88xx_FPSC:0x02\nbuf[4]=0x00;//AMG88xx_FPS_10:0x00\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 541.75,
+        "y": 389.75,
+        "wires": [
+            [
+                "cfcfe18a.883dd"
+            ]
+        ]
+    },
+    {
+        "id": "ec4920ff.b8cff8",
+        "type": "delay",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 358.75,
+        "y": 389.75,
+        "wires": [
+            [
+                "60b0f34.b90980c"
+            ]
+        ]
+    },
+    {
+        "id": "46f31163.2638e8",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "初期化コマンド3",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xD0;//i2c addr (0x68<1)\nbuf[2]=0x02;//send data 1\nbuf[3]=0x03;//AMG88xx_INTC:0x03\nbuf[4]=0x00;//interrupt dis:0x00\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 538.75,
+        "y": 338.75,
+        "wires": [
+            [
+                "ec4920ff.b8cff8"
+            ]
+        ]
+    },
+    {
+        "id": "4ad94251.f6a56c",
+        "type": "delay",
+        "z": "583f89d.19b9d78",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 355.75,
+        "y": 338.75,
+        "wires": [
+            [
+                "46f31163.2638e8"
+            ]
+        ]
+    },
+    {
+        "id": "969a36a4.f89138",
+        "type": "ui_heat_map",
+        "z": "583f89d.19b9d78",
+        "group": "975f1f8a.0c702",
+        "order": 9,
+        "width": "5",
+        "height": "5",
+        "name": "",
+        "rows": "8",
+        "columns": "8",
+        "minMax": false,
+        "minimumValue": 0,
+        "maximumValue": "30",
+        "backgroundType": "color",
+        "backgroundColor": "#ffffff",
+        "radius": "40",
+        "opacity": "0.6",
+        "blur": "0.85",
+        "showValues": false,
+        "gridType": "none",
+        "valuesDecimals": 0,
+        "showLegend": false,
+        "legendType": "none",
+        "legendDecimals": 0,
+        "legendCount": 2,
+        "x": 1195.86669921875,
+        "y": 806.5,
+        "wires": []
+    },
+    {
+        "id": "4c280b19.4077bc",
+        "type": "function",
+        "z": "583f89d.19b9d78",
+        "name": "Modify Data for heatmap",
+        "func": "var t=msg.payload;\nvar map=[];\n\nfor(var i=0; i<8; i++){\n    for(var j=0; j<8; j++){\n        \n        map[i*8+j]=t[i][j];\n        \n    }\n}\n\nmsg.payload=map;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 952.86669921875,
+        "y": 806.25,
+        "wires": [
+            [
+                "969a36a4.f89138"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM17",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    },
+    {
+        "id": "975f1f8a.0c702",
+        "type": "ui_group",
+        "z": "",
+        "name": "新規",
+        "tab": "e30a7382.b413e",
+        "order": 1,
+        "disp": true,
+        "width": "30",
+        "collapse": false
+    },
+    {
+        "id": "e30a7382.b413e",
+        "type": "ui_tab",
+        "z": "",
+        "name": "新規",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]
