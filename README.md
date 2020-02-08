@@ -18,7 +18,9 @@ USB Serial I2C Converter
  * シリアルI2C変換[SC18IM700][1]のデフォルトボーレートは9600bpsです  
  * アドレスの異なる複数のデバイスを接続する場合は[I2Cハブ][7]を使用してください
  * 基板のピンヘッダを用いることでSC18IM700単体の変換基板としても使用できます  
- 
+ * USB5V電源入力側に350mA定格のリセッタブルヒューズを搭載しています  
+ * 給電可能な電流は3.3Vラインで最大150mA前後、5Vラインで最大350mAです  
+
 ## USBドライバ
  * Windows版は[こちらからダウンロード][2]して使用してください  
  ※標準ドライバではNode-Redで動作不具合があるため、最新のドライバに更新し、再起動後に使用してください
@@ -42,7 +44,8 @@ USB Serial I2C Converter
 
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img1.jpg" width="360">
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img2.jpg" width="360">
-
+ 
+ ※上記写真は試作基板のため、量産版と異なる場合があります  
    
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
 [2]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=225&pcid=41
