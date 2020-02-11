@@ -1,0 +1,305 @@
+[
+    {
+        "id": "b15cfcc8.f3278",
+        "type": "tab",
+        "label": "フロー 6",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "2c346fe6.7e425",
+        "type": "comment",
+        "z": "b15cfcc8.f3278",
+        "name": "VL53L0X",
+        "info": "",
+        "x": 152.56666564941406,
+        "y": 109.56666564941406,
+        "wires": []
+    },
+    {
+        "id": "a0a4ac68.f8de1",
+        "type": "function",
+        "z": "b15cfcc8.f3278",
+        "name": "レジスタ読み込み",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0x52;//i2c addr　0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=0x01;//send data 2\nbuf[3]=0x14;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0x52+1;//i2c addr+1, write addr+1 = read addr, 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[6]=0x0C;//recieve data 2\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 516.566650390625,
+        "y": 551.566650390625,
+        "wires": [
+            [
+                "4e3f73bd.9e8ae4"
+            ]
+        ]
+    },
+    {
+        "id": "5a8da82e.e3e5f8",
+        "type": "inject",
+        "z": "b15cfcc8.f3278",
+        "name": "距離測定",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 165.683349609375,
+        "y": 202.81666564941406,
+        "wires": [
+            [
+                "5b3103bf.34151c"
+            ]
+        ]
+    },
+    {
+        "id": "4e3f73bd.9e8ae4",
+        "type": "serial request",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 728.566650390625,
+        "y": 549.566650390625,
+        "wires": [
+            [
+                "918643d2.debed"
+            ]
+        ]
+    },
+    {
+        "id": "fc58e6be.66b2b",
+        "type": "debug",
+        "z": "b15cfcc8.f3278",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1090.566650390625,
+        "y": 641.566650390625,
+        "wires": []
+    },
+    {
+        "id": "5b3103bf.34151c",
+        "type": "function",
+        "z": "b15cfcc8.f3278",
+        "name": "イニシャライズ",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0x52;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=2;//send data 2\nbuf[3]=0x00;//VL53L0X_REG_SYSRANGE_START\nbuf[4]=0x01;//\nbuf[5]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 370.566650390625,
+        "y": 206.56666564941406,
+        "wires": [
+            [
+                "3bde854a.64e552",
+                "5f8c2520.4632bc"
+            ]
+        ]
+    },
+    {
+        "id": "3bde854a.64e552",
+        "type": "serial out",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 644.566650390625,
+        "y": 208.56666564941406,
+        "wires": []
+    },
+    {
+        "id": "157bb102.0698c7",
+        "type": "function",
+        "z": "b15cfcc8.f3278",
+        "name": "ステータス読み込み",
+        "func": "var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x52;//i2c addr\nbuf[2]=0x01;//send data 1\nbuf[3]=0x14;//VL53L0X_REG_RESULT_RANGE_STATUS\nbuf[4]=0x53;//restart\nbuf[5]=0x52+1;//i2c addr \nbuf[6]=0x01;//recieve data 8\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 399.31666564941406,
+        "y": 315.316650390625,
+        "wires": [
+            [
+                "1ca4e7e4.d382e"
+            ]
+        ]
+    },
+    {
+        "id": "1ca4e7e4.d382e",
+        "type": "serial request",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 589.3166656494141,
+        "y": 320.316650390625,
+        "wires": [
+            [
+                "7beeaf71.303648"
+            ]
+        ]
+    },
+    {
+        "id": "8544455a.dc27e8",
+        "type": "debug",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1105.316665649414,
+        "y": 419.316650390625,
+        "wires": []
+    },
+    {
+        "id": "76b909d9.cd19a",
+        "type": "switch",
+        "z": "b15cfcc8.f3278",
+        "name": "!=0",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "1",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 815.316650390625,
+        "y": 368.316650390625,
+        "wires": [
+            [
+                "478b7a7f.8ef944"
+            ],
+            [
+                "c644efb1.bc05e8"
+            ]
+        ]
+    },
+    {
+        "id": "478b7a7f.8ef944",
+        "type": "delay",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "10",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 566.316650390625,
+        "y": 438.316650390625,
+        "wires": [
+            [
+                "157bb102.0698c7"
+            ]
+        ]
+    },
+    {
+        "id": "c644efb1.bc05e8",
+        "type": "template",
+        "z": "b15cfcc8.f3278",
+        "name": "ステータス確認",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "初期化完了",
+        "x": 869.3166656494141,
+        "y": 443.316650390625,
+        "wires": [
+            [
+                "8544455a.dc27e8",
+                "a0a4ac68.f8de1"
+            ]
+        ]
+    },
+    {
+        "id": "7beeaf71.303648",
+        "type": "function",
+        "z": "b15cfcc8.f3278",
+        "name": "チェックデータ",
+        "func": "var res = msg.payload[0] & 0x01;\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 754.949951171875,
+        "y": 320.36663818359375,
+        "wires": [
+            [
+                "76b909d9.cd19a",
+                "8544455a.dc27e8"
+            ]
+        ]
+    },
+    {
+        "id": "918643d2.debed",
+        "type": "function",
+        "z": "b15cfcc8.f3278",
+        "name": "チェックデータ",
+        "func": "var dist = (msg.payload[10] <<8) + msg.payload[11];\nvar ambient_cnt = (msg.payload[6] <<8) + msg.payload[7];\nvar signal_cnt = (msg.payload[8] <<8) + msg.payload[9];\nvar range_stat = (msg.payload[0] & 0x78) >> 3;\n\nvar res={distance:0, ambient_cnt:0,signal_cnt:0, range_stat:0 };\n//res.distance = dist*0.1+ \" mm\" ;\nres.distance = Math.round(10*dist)/100 + \" cm\";\nres.ambient_cnt = ambient_cnt;\nres.signal_cnt = signal_cnt;\nres.range_stat = range_stat;//11 OK, else NG\n\nmsg.payload = res;\n//msg.payload = Math.round(10*dist)/10 +\" mm\"\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 903.566650390625,
+        "y": 550.566650390625,
+        "wires": [
+            [
+                "fc58e6be.66b2b"
+            ]
+        ]
+    },
+    {
+        "id": "5f8c2520.4632bc",
+        "type": "delay",
+        "z": "b15cfcc8.f3278",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "5",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 370.566650390625,
+        "y": 259.566650390625,
+        "wires": [
+            [
+                "157bb102.0698c7"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM17",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]

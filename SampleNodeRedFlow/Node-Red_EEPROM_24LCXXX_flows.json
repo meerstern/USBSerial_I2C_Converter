@@ -1,0 +1,822 @@
+[
+    {
+        "id": "ec034d82.8ad5d",
+        "type": "tab",
+        "label": "フロー 5",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "47863869.e86dc8",
+        "type": "switch",
+        "z": "ec034d82.8ad5d",
+        "name": "i<4096",
+        "property": "i",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "4096",
+                "vt": "num"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 577.3333282470703,
+        "y": 784.3333740234375,
+        "wires": [
+            [
+                "c925cf43.ade158"
+            ],
+            [
+                "570cac92.a47b4c"
+            ]
+        ]
+    },
+    {
+        "id": "9930fc71.555ac",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "i++",
+        "func": "msg.i=msg.i+1;\nglobal.set(\"LOOP_i\",msg.i);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 839.3332672119141,
+        "y": 681.3333740234375,
+        "wires": [
+            [
+                "47863869.e86dc8"
+            ]
+        ]
+    },
+    {
+        "id": "11d6f0b.f6eb98f",
+        "type": "inject",
+        "z": "ec034d82.8ad5d",
+        "name": "メモリRead",
+        "topic": "",
+        "payload": "読み込み開始",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": "",
+        "x": 228.22914123535156,
+        "y": 785.2222900390625,
+        "wires": [
+            [
+                "1ba3a56f.19596b",
+                "8957139.822a77"
+            ]
+        ]
+    },
+    {
+        "id": "2f8db6f8.0386b2",
+        "type": "template",
+        "z": "ec034d82.8ad5d",
+        "name": "\"i bit\"",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{i}}回目",
+        "x": 1341.333267211914,
+        "y": 787.3333740234375,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "c925cf43.ade158",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Read Device",
+        "func": "var buf = new Buffer(9); \n\nvar i = global.get(\"LOOP_i\");\nvar addr = i * 0x10;//read 16byte\nglobal.set(\"ADDR\",addr);\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=0x02;//send data 2\nbuf[3]=(addr >> 8) & 0xFF;\nbuf[4]=addr & 0xFF;\nbuf[5]=0x53;//restart\nbuf[6]=0xA0+1;//i2c addr, write addr+1 = read addr, 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[7]=0x10;//recieve data 16\nbuf[8]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 772.3333282470703,
+        "y": 783.8333740234375,
+        "wires": [
+            [
+                "16ee6469.acd874"
+            ]
+        ]
+    },
+    {
+        "id": "16ee6469.acd874",
+        "type": "serial request",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 968.3332672119141,
+        "y": 784.3333740234375,
+        "wires": [
+            [
+                "7920359b.b8a1a4"
+            ]
+        ]
+    },
+    {
+        "id": "7920359b.b8a1a4",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Get Response",
+        "func": "var loop_i = global.get(\"LOOP_i\");\n\nvar mem_read_array = global.get(\"MEM_READ_ARRAY\");\nvar mem_read = [\n                msg.payload[0],\n                msg.payload[1],\n                msg.payload[2],\n                msg.payload[3],\n                msg.payload[4],\n                msg.payload[5],\n                msg.payload[6],\n                msg.payload[7],\n                msg.payload[8],\n                msg.payload[9],\n                msg.payload[10],\n                msg.payload[11],\n                msg.payload[12],\n                msg.payload[13],\n                msg.payload[14],\n                msg.payload[15]\n                ];\n                \nmem_read_array.push(mem_read);\n//mem_read_array[loop_i] = mem_read;\n\nmsg.payload=mem_read_array;\nmsg.i=loop_i;\n\nglobal.set(\"MEM_READ_ARRAY\",mem_read_array);\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 1161.333267211914,
+        "y": 786.3333740234375,
+        "wires": [
+            [
+                "6e292b51.3016c4",
+                "9930fc71.555ac"
+            ]
+        ]
+    },
+    {
+        "id": "1ba3a56f.19596b",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "i=0",
+        "func": "\nmsg.i=0;\nvar mem_read_array=[];\nglobal.set(\"MEM_READ_ARRAY\",mem_read_array);\nglobal.set(\"LOOP_i\",msg.i);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 417.4500274658203,
+        "y": 784.3333740234375,
+        "wires": [
+            [
+                "47863869.e86dc8"
+            ]
+        ]
+    },
+    {
+        "id": "6e292b51.3016c4",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "途中",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1324.833267211914,
+        "y": 826.3333740234375,
+        "wires": []
+    },
+    {
+        "id": "2b3f8028.ba4428",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "EEPROM 24LC64, 256, 512",
+        "info": "",
+        "x": 215.3333282470703,
+        "y": 116.33332824707031,
+        "wires": []
+    },
+    {
+        "id": "2449dc99.d5257c",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Check Device",
+        "func": "var buf = new Buffer(9); \n\nvar i= global.get(\"LOOP_i\");\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr　0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=0x02;//send data 2\nbuf[3]=0x00;//offset 0\nbuf[4]=0x00;//offset 0\nbuf[5]=0x53;//restart\nbuf[6]=0xA0+1;//i2c addr+1, write addr+1 = read addr, 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[7]=0x10;//recieve data 2\nbuf[8]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 506.75,
+        "y": 262.75,
+        "wires": [
+            [
+                "b0a90f6.c14fc7"
+            ]
+        ]
+    },
+    {
+        "id": "c1d99407.fde77",
+        "type": "inject",
+        "z": "ec034d82.8ad5d",
+        "name": "16バイトRead",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 269.86669921875,
+        "y": 262,
+        "wires": [
+            [
+                "2449dc99.d5257c"
+            ]
+        ]
+    },
+    {
+        "id": "b0a90f6.c14fc7",
+        "type": "serial request",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 727.75,
+        "y": 263.75,
+        "wires": [
+            [
+                "f733ce62.acbc18"
+            ]
+        ]
+    },
+    {
+        "id": "f733ce62.acbc18",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 911.75,
+        "y": 263.75,
+        "wires": []
+    },
+    {
+        "id": "e5f3f094.dba028",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Check Device",
+        "func": "var buf = new Buffer(14); \n\nvar i= global.get(\"LOOP_i\");\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=10;//send data 2\nbuf[3]=0x00;//high addr byte\nbuf[4]=0x00;//low addr byte\nbuf[5]=1;//data 0\nbuf[6]=2;//data 1\nbuf[7]=3;//data 2\nbuf[8]=4;//data 3\nbuf[9]=5;//data 4\nbuf[10]=6;//data 5\nbuf[11]=7;//data 6\nbuf[12]=8;//data 7\nbuf[13]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 507.75,
+        "y": 348.75,
+        "wires": [
+            [
+                "31142fbd.3863",
+                "ba25cfb0.4ff2"
+            ]
+        ]
+    },
+    {
+        "id": "1128e591.11bc3a",
+        "type": "inject",
+        "z": "ec034d82.8ad5d",
+        "name": "16バイトWrite",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 270.86669921875,
+        "y": 348,
+        "wires": [
+            [
+                "e5f3f094.dba028"
+            ]
+        ]
+    },
+    {
+        "id": "31142fbd.3863",
+        "type": "serial out",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 883.86669921875,
+        "y": 353.5,
+        "wires": []
+    },
+    {
+        "id": "3a38fc54.f91fac",
+        "type": "file",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "filename": "mem_read.csv",
+        "appendNewline": false,
+        "createDir": true,
+        "overwriteFile": "true",
+        "encoding": "Shift_JIS",
+        "x": 1151.866714477539,
+        "y": 867.75,
+        "wires": [
+            [
+                "a899b87d.e035a"
+            ]
+        ]
+    },
+    {
+        "id": "ba25cfb0.4ff2",
+        "type": "delay",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "50",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 456.949951171875,
+        "y": 402.70001220703125,
+        "wires": [
+            [
+                "86e5fb12.627f8"
+            ]
+        ]
+    },
+    {
+        "id": "86e5fb12.627f8",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Check Device",
+        "func": "var buf = new Buffer(15); \n\nvar i= global.get(\"LOOP_i\");\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=10;//send data \nbuf[3]=0x00;//high addr byte\nbuf[4]=0x08;//low addr byte\nbuf[5]=9;//data 0\nbuf[6]=10;//data 1\nbuf[7]=11;//data 2\nbuf[8]=12;//data 3\nbuf[9]=13;//data 4\nbuf[10]=14;//data 5\nbuf[11]=15;//data 6\nbuf[12]=16;//data 7\nbuf[13]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 636.13330078125,
+        "y": 402.566650390625,
+        "wires": [
+            [
+                "31142fbd.3863"
+            ]
+        ]
+    },
+    {
+        "id": "570cac92.a47b4c",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Get Response",
+        "func": "var mem_read_array = global.get(\"MEM_READ_ARRAY\");\nmsg.payload=mem_read_array;\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 760.5666656494141,
+        "y": 868.566650390625,
+        "wires": [
+            [
+                "da88f995.d9dee"
+            ]
+        ]
+    },
+    {
+        "id": "da88f995.d9dee",
+        "type": "csv",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "sep": ",",
+        "hdrin": false,
+        "hdrout": false,
+        "multi": "one",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": false,
+        "x": 959.5666656494141,
+        "y": 866.566650390625,
+        "wires": [
+            [
+                "3a38fc54.f91fac"
+            ]
+        ]
+    },
+    {
+        "id": "a899b87d.e035a",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1327.566665649414,
+        "y": 873.566650390625,
+        "wires": []
+    },
+    {
+        "id": "1a7802b4.783825",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "24LC64:512, 24LC256:2048, 24LC512:4096",
+        "info": "",
+        "x": 687.9499664306641,
+        "y": 933.066650390625,
+        "wires": []
+    },
+    {
+        "id": "765fc2c8.b1a96c",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "バッファサイズ制約でページ書き込み未対応",
+        "info": "",
+        "x": 758.566650390625,
+        "y": 1427.5665893554688,
+        "wires": []
+    },
+    {
+        "id": "d20baae7.5b8ac8",
+        "type": "csv",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "sep": ",",
+        "hdrin": "",
+        "hdrout": "",
+        "multi": "mult",
+        "ret": "\\n",
+        "temp": "",
+        "skip": "0",
+        "strings": true,
+        "x": 605.949951171875,
+        "y": 1119.13330078125,
+        "wires": [
+            [
+                "eeced86e.8b4b78"
+            ]
+        ]
+    },
+    {
+        "id": "72c7e5b3.df5584",
+        "type": "file in",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "filename": "mem_write.csv",
+        "format": "utf8",
+        "chunk": false,
+        "sendError": false,
+        "encoding": "none",
+        "x": 414.94996643066406,
+        "y": 1118.1666412353516,
+        "wires": [
+            [
+                "d20baae7.5b8ac8"
+            ]
+        ]
+    },
+    {
+        "id": "3a054a5b.cd972e",
+        "type": "inject",
+        "z": "ec034d82.8ad5d",
+        "name": "メモリWrite",
+        "topic": "",
+        "payload": "書き込み開始",
+        "payloadType": "str",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 215.9499969482422,
+        "y": 1121.000015258789,
+        "wires": [
+            [
+                "72c7e5b3.df5584",
+                "5238ccca.93ab6c"
+            ]
+        ]
+    },
+    {
+        "id": "260f2841.c41db8",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1020.566650390625,
+        "y": 1122.36669921875,
+        "wires": []
+    },
+    {
+        "id": "eeced86e.8b4b78",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Get CSV",
+        "func": "var len = msg.payload.length;\nglobal.set(\"LENGTH\",len);\nglobal.set(\"WRITE_DATA\",msg.payload);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 768.949951171875,
+        "y": 1120.36669921875,
+        "wires": [
+            [
+                "260f2841.c41db8",
+                "760b6d50.895c2c"
+            ]
+        ]
+    },
+    {
+        "id": "9c516dd.236951",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "i++",
+        "func": "msg.i=msg.i+1;\nglobal.set(\"LOOP_i\",msg.i);\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 847.5665893554688,
+        "y": 1205.566650390625,
+        "wires": [
+            [
+                "25696c98.5b23cc"
+            ]
+        ]
+    },
+    {
+        "id": "ffa6cc19.60297",
+        "type": "template",
+        "z": "ec034d82.8ad5d",
+        "name": "\"i bit\"",
+        "field": "payload",
+        "fieldType": "msg",
+        "format": "handlebars",
+        "syntax": "mustache",
+        "template": "{{i}}回目",
+        "x": 1389.5665283203125,
+        "y": 1376.566650390625,
+        "wires": [
+            [
+                "9c516dd.236951"
+            ]
+        ]
+    },
+    {
+        "id": "88620a74.b2c2",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Write Device Lower 8Byte",
+        "func": "var buf = new Buffer(14); \n\nvar i= global.get(\"LOOP_i\");\nvar addr = i * 0x10 + 0x00;//write 8byte\nvar read_data = global.get(\"WRITE_DATA\");\n\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=10;//send data 2\nbuf[3]=(addr >> 8) & 0xFF;\nbuf[4]=addr & 0xFF;\nbuf[5]=read_data[i].col1 & 0xFF;//data 0\nbuf[6]=read_data[i].col2 & 0xFF;//data 1\nbuf[7]=read_data[i].col3 & 0xFF;//data 2\nbuf[8]=read_data[i].col4 & 0xFF;//data 3\nbuf[9]=read_data[i].col5 & 0xFF;//data 4\nbuf[10]=read_data[i].col6 & 0xFF;//data 5\nbuf[11]=read_data[i].col7 & 0xFF;//data 6\nbuf[12]=read_data[i].col8 & 0xFF;//data 7\nbuf[13]=0x50;//stop\nmsg.payload = buf;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 699.566650390625,
+        "y": 1308.066650390625,
+        "wires": [
+            [
+                "c9a0db1c.d77c68",
+                "7dc3a22d.d3df24"
+            ]
+        ]
+    },
+    {
+        "id": "760b6d50.895c2c",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "i=0",
+        "func": "msg.i=0;\nglobal.set(\"LOOP_i\",msg.i);\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 294.683349609375,
+        "y": 1326.566650390625,
+        "wires": [
+            [
+                "25696c98.5b23cc"
+            ]
+        ]
+    },
+    {
+        "id": "59c187ee.3d1b98",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "途中",
+        "active": false,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1156.0665283203125,
+        "y": 1434.566650390625,
+        "wires": []
+    },
+    {
+        "id": "da4cbba.075a848",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Display Write Data",
+        "func": "var write_data = global.get(\"WRITE_DATA\");\nmsg.payload=write_data;\n\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 650.7999877929688,
+        "y": 1521.7999267578125,
+        "wires": [
+            [
+                "5ec7fb3c.1882d4"
+            ]
+        ]
+    },
+    {
+        "id": "5ec7fb3c.1882d4",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 859.800048828125,
+        "y": 1520.7998657226562,
+        "wires": []
+    },
+    {
+        "id": "25696c98.5b23cc",
+        "type": "switch",
+        "z": "ec034d82.8ad5d",
+        "name": "i<Length",
+        "property": "i",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lt",
+                "v": "LENGTH",
+                "vt": "global"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 484.566650390625,
+        "y": 1327.566650390625,
+        "wires": [
+            [
+                "88620a74.b2c2"
+            ],
+            [
+                "da4cbba.075a848"
+            ]
+        ]
+    },
+    {
+        "id": "c9a0db1c.d77c68",
+        "type": "delay",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "15",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 699.566650390625,
+        "y": 1371.1666259765625,
+        "wires": [
+            [
+                "94535697.c5bd7"
+            ]
+        ]
+    },
+    {
+        "id": "94535697.c5bd7",
+        "type": "function",
+        "z": "ec034d82.8ad5d",
+        "name": "Write Device  Upper 8Byte",
+        "func": "var buf = new Buffer(14); \n\nvar i= global.get(\"LOOP_i\");\nvar addr = i * 0x10 + 0x08;//write 8byte\nvar read_data = global.get(\"WRITE_DATA\");\n\n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr 0xA0,0xA2,0xA4,0xA6,0xA8,0xAA,0xAC,0xAE\nbuf[2]=10;//send data 2\nbuf[3]=(addr >> 8) & 0xFF;\nbuf[4]=addr & 0xFF;\nbuf[5]=read_data[i].col9 & 0xFF;//data 0\nbuf[6]=read_data[i].col10 & 0xFF;//data 1\nbuf[7]=read_data[i].col11 & 0xFF;//data 2\nbuf[8]=read_data[i].col12 & 0xFF;//data 3\nbuf[9]=read_data[i].col13 & 0xFF;//data 4\nbuf[10]=read_data[i].col14 & 0xFF;//data 5\nbuf[11]=read_data[i].col15 & 0xFF;//data 6\nbuf[12]=read_data[i].col16 & 0xFF;//data 7\nbuf[13]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 921.566650390625,
+        "y": 1371.1666259765625,
+        "wires": [
+            [
+                "7dc3a22d.d3df24",
+                "3b4ab02e.84a248",
+                "59c187ee.3d1b98"
+            ]
+        ]
+    },
+    {
+        "id": "7dc3a22d.d3df24",
+        "type": "serial out",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 1207.566650390625,
+        "y": 1265.7666015625,
+        "wires": []
+    },
+    {
+        "id": "3b4ab02e.84a248",
+        "type": "delay",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "15",
+        "timeoutUnits": "milliseconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "x": 1180.566650390625,
+        "y": 1375.7666015625,
+        "wires": [
+            [
+                "ffa6cc19.60297"
+            ]
+        ]
+    },
+    {
+        "id": "b9245c81.e51988",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "Full Read EEPROM",
+        "info": "",
+        "x": 238.56666564941406,
+        "y": 692.566650390625,
+        "wires": []
+    },
+    {
+        "id": "ba3f07ce.f8a73",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "Full Write EEPROM",
+        "info": "",
+        "x": 229.56666564941406,
+        "y": 1014.566650390625,
+        "wires": []
+    },
+    {
+        "id": "f5c9b3b3.be7948",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "10分程度要します",
+        "info": "",
+        "x": 999.566650390625,
+        "y": 929.9666748046875,
+        "wires": []
+    },
+    {
+        "id": "f75f096d.c1f6a8",
+        "type": "comment",
+        "z": "ec034d82.8ad5d",
+        "name": "10分程度要します",
+        "info": "",
+        "x": 675.566650390625,
+        "y": 1474.36669921875,
+        "wires": []
+    },
+    {
+        "id": "5238ccca.93ab6c",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 592.3333129882812,
+        "y": 1018.3333129882812,
+        "wires": []
+    },
+    {
+        "id": "8957139.822a77",
+        "type": "debug",
+        "z": "ec034d82.8ad5d",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 544.3333129882812,
+        "y": 686.3333129882812,
+        "wires": []
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM17",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "100",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
