@@ -1,0 +1,201 @@
+[
+    {
+        "id": "9961d2c3.0fa988",
+        "type": "tab",
+        "label": "フロー 11",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "69eacc8d.a5b494",
+        "type": "comment",
+        "z": "9961d2c3.0fa988",
+        "name": "MLX90614 0xB4",
+        "info": "",
+        "x": 192.56666564941406,
+        "y": 114.56666564941406,
+        "wires": []
+    },
+    {
+        "id": "f10ae565.2b592",
+        "type": "function",
+        "z": "9961d2c3.0fa988",
+        "name": "MLX90614_TA",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0xB4;//i2c addr　\nbuf[2]=0x01;//send data 1\nbuf[3]=0x06;//MLX90614_TA\nbuf[4]=0x53;//restart\nbuf[5]=0xB4+1;//i2c addr+1, write addr+1 = read addr\nbuf[6]=0x3;//recieve data 2\nbuf[7]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 523.9833374023438,
+        "y": 260.98333740234375,
+        "wires": [
+            [
+                "9f7c2a20.b49438"
+            ]
+        ]
+    },
+    {
+        "id": "be2efc78.912ea8",
+        "type": "inject",
+        "z": "9961d2c3.0fa988",
+        "name": "周辺温度測定",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 277.10003662109375,
+        "y": 260.23333740234375,
+        "wires": [
+            [
+                "f10ae565.2b592"
+            ]
+        ]
+    },
+    {
+        "id": "9f7c2a20.b49438",
+        "type": "serial request",
+        "z": "9961d2c3.0fa988",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 744.9833374023438,
+        "y": 261.98333740234375,
+        "wires": [
+            [
+                "faaa741c.49fdf8"
+            ]
+        ]
+    },
+    {
+        "id": "27fccaa7.d75c4e",
+        "type": "debug",
+        "z": "9961d2c3.0fa988",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1030.9833374023438,
+        "y": 256.98333740234375,
+        "wires": []
+    },
+    {
+        "id": "8030fee.482d48",
+        "type": "function",
+        "z": "9961d2c3.0fa988",
+        "name": "MLX90614_TOBJ1",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0xB4;//i2c addr　\nbuf[2]=0x01;//send data 1\nbuf[3]=0x07;//MLX90614_TOBJ1\nbuf[4]=0x53;//restart\nbuf[5]=0xB4+1;//i2c addr+1, write addr+1 = read addr\nbuf[6]=0x3;//recieve data 2\nbuf[7]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 544.566650390625,
+        "y": 346.566650390625,
+        "wires": [
+            [
+                "798854b8.06fd8c"
+            ]
+        ]
+    },
+    {
+        "id": "86c6b3dd.17fd08",
+        "type": "inject",
+        "z": "9961d2c3.0fa988",
+        "name": "物体温度測定",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 277.683349609375,
+        "y": 345.816650390625,
+        "wires": [
+            [
+                "8030fee.482d48"
+            ]
+        ]
+    },
+    {
+        "id": "798854b8.06fd8c",
+        "type": "serial request",
+        "z": "9961d2c3.0fa988",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 745.566650390625,
+        "y": 347.566650390625,
+        "wires": [
+            [
+                "f827c582.ce934"
+            ]
+        ]
+    },
+    {
+        "id": "c06d34.39d4bad",
+        "type": "debug",
+        "z": "9961d2c3.0fa988",
+        "name": "終了",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1049.566650390625,
+        "y": 346.566650390625,
+        "wires": []
+    },
+    {
+        "id": "faaa741c.49fdf8",
+        "type": "function",
+        "z": "9961d2c3.0fa988",
+        "name": "温度変換",
+        "func": "if(msg.payload[0]==undefined)return null;\n\nvar res = msg.payload[0] + (msg.payload[1]<<8);\nres = res/50.0-273.15;\n\nres = Math.round(100*res)/100;\n\nmsg.payload = res+' ℃';\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 888.566650390625,
+        "y": 260.566650390625,
+        "wires": [
+            [
+                "27fccaa7.d75c4e"
+            ]
+        ]
+    },
+    {
+        "id": "f827c582.ce934",
+        "type": "function",
+        "z": "9961d2c3.0fa988",
+        "name": "温度変換",
+        "func": "if(msg.payload[0]==undefined)return null;\n\nvar res = msg.payload[0] + (msg.payload[1]<<8);\nres = res/50.0-273.15;\n\nres = Math.round(100*res)/100;\n\nmsg.payload = res+' ℃';;\n\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 895.566650390625,
+        "y": 347.566650390625,
+        "wires": [
+            [
+                "c06d34.39d4bad"
+            ]
+        ]
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM17",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "30",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
