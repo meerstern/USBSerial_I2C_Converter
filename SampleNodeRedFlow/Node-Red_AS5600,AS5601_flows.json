@@ -1,0 +1,120 @@
+[
+    {
+        "id": "247ca946.41737e",
+        "type": "tab",
+        "label": "フロー 14",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "dd42d7c8.9c5988",
+        "type": "function",
+        "z": "247ca946.41737e",
+        "name": "Agnle Read",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0x6C;//i2c addr\nbuf[2]=0x01;//send data 1\nbuf[3]=0x0C;//REG_RAW_ANGLE\nbuf[4]=0x53;//restart\nbuf[5]=0x6C+1;//i2c addr+1, write addr+1 = read addr, \nbuf[6]=2;//recieve data 3\nbuf[7]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 430.566650390625,
+        "y": 118.56666564941406,
+        "wires": [
+            [
+                "99a3b5df.e74de8"
+            ]
+        ]
+    },
+    {
+        "id": "5930240d.ac472c",
+        "type": "inject",
+        "z": "247ca946.41737e",
+        "name": "角度読み込み",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 210.566650390625,
+        "y": 119.56666564941406,
+        "wires": [
+            [
+                "dd42d7c8.9c5988"
+            ]
+        ]
+    },
+    {
+        "id": "99a3b5df.e74de8",
+        "type": "serial request",
+        "z": "247ca946.41737e",
+        "name": "",
+        "serial": "c8df3964.3efad",
+        "x": 653.566650390625,
+        "y": 119.56666564941406,
+        "wires": [
+            [
+                "bf39d634.286d28"
+            ]
+        ]
+    },
+    {
+        "id": "477d441b.7962dc",
+        "type": "debug",
+        "z": "247ca946.41737e",
+        "name": "結果",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1007.566650390625,
+        "y": 123.56654357910156,
+        "wires": []
+    },
+    {
+        "id": "bf39d634.286d28",
+        "type": "function",
+        "z": "247ca946.41737e",
+        "name": "チェックデータ",
+        "func": "\n\nvar a1,a2, ang,deg;\n\na1 = (msg.payload[0]<< 8) & 0x0F00;\na2 = (msg.payload[1])&0xFF;\n\n\nang = a1 | a2;\ndeg = ang/4096.0*360;\n\nres = Math.round(10*deg)/10.0;\n\nmsg.payload=res+\" degree\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 839.566650390625,
+        "y": 118.96669006347656,
+        "wires": [
+            [
+                "477d441b.7962dc"
+            ]
+        ]
+    },
+    {
+        "id": "53070c8b.f7e984",
+        "type": "comment",
+        "z": "247ca946.41737e",
+        "name": "AS5600/AS5601 Angle Read",
+        "info": "",
+        "x": 197.56666564941406,
+        "y": 53.56666564941406,
+        "wires": []
+    },
+    {
+        "id": "c8df3964.3efad",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM14",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "30",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
