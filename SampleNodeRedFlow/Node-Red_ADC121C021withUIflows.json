@@ -1,0 +1,353 @@
+[
+    {
+        "id": "e29fa658.09f818",
+        "type": "tab",
+        "label": "フロー 4",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "36b1ee96.5dcb62",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "値取得",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr(0x50<<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//\nbuf[4]=0x53;//restart\nbuf[5]=0xA0+1;//i2c addr+1, write addr+1 = read addr, \nbuf[6]=0x2;//recieve data 2\nbuf[7]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 401.56663513183594,
+        "y": 314.566650390625,
+        "wires": [
+            [
+                "fe41ff28.2571"
+            ]
+        ]
+    },
+    {
+        "id": "7fee1066.56355",
+        "type": "inject",
+        "z": "e29fa658.09f818",
+        "name": "ADC値取得",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 169.56663513183594,
+        "y": 314.566650390625,
+        "wires": [
+            [
+                "36b1ee96.5dcb62"
+            ]
+        ]
+    },
+    {
+        "id": "fe41ff28.2571",
+        "type": "serial request",
+        "z": "e29fa658.09f818",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 612.5666351318359,
+        "y": 314.566650390625,
+        "wires": [
+            [
+                "1db2a4b4.5f3e93"
+            ]
+        ]
+    },
+    {
+        "id": "4a30ddf1.3179a4",
+        "type": "debug",
+        "z": "e29fa658.09f818",
+        "name": "結果",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 997.566650390625,
+        "y": 313.5665283203125,
+        "wires": []
+    },
+    {
+        "id": "1db2a4b4.5f3e93",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "電圧値変換",
+        "func": "var res={raw:0,flg:\"\",volt:0.0};\n\n\nres.raw=((msg.payload[0]&0x0F)<<8)+msg.payload[1];\nres.volt=res.raw/4096.0*5.0;//Depends on USB Power Voltage\n\nres.volt = Math.round(res.volt*100)/100;\n\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 790.13330078125,
+        "y": 314.566650390625,
+        "wires": [
+            [
+                "4a30ddf1.3179a4",
+                "f2b35f71.8a15c8"
+            ]
+        ]
+    },
+    {
+        "id": "dac05819.bc7b98",
+        "type": "comment",
+        "z": "e29fa658.09f818",
+        "name": "Grove ADC ADC121C021",
+        "info": "",
+        "x": 176.56666564941406,
+        "y": 112.56666564941406,
+        "wires": []
+    },
+    {
+        "id": "4551c625.8302d8",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "自動変換モード",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr(0x50<<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x02;//Select configuration register\nbuf[4]=0x20;//Automatic conversion mode enabled\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 392.566650390625,
+        "y": 188.56666564941406,
+        "wires": [
+            [
+                "a878f644.64f398"
+            ]
+        ]
+    },
+    {
+        "id": "2dd79228.81e9be",
+        "type": "inject",
+        "z": "e29fa658.09f818",
+        "name": "初期化",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 157.566650390625,
+        "y": 188.56666564941406,
+        "wires": [
+            [
+                "4551c625.8302d8"
+            ]
+        ]
+    },
+    {
+        "id": "a878f644.64f398",
+        "type": "serial out",
+        "z": "e29fa658.09f818",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 610.949951171875,
+        "y": 188.06666564941406,
+        "wires": []
+    },
+    {
+        "id": "3db70350.d51764",
+        "type": "ui_chart",
+        "z": "e29fa658.09f818",
+        "name": "",
+        "group": "ccff5b44.2d8488",
+        "order": 0,
+        "width": "16",
+        "height": "11",
+        "label": "chart",
+        "chartType": "line",
+        "legend": "false",
+        "xformat": "HH:mm:ss",
+        "interpolate": "linear",
+        "nodata": "",
+        "dot": false,
+        "ymin": "",
+        "ymax": "",
+        "removeOlder": 1,
+        "removeOlderPoints": "",
+        "removeOlderUnit": "3600",
+        "cutout": 0,
+        "useOneColor": false,
+        "colors": [
+            "#1f77b4",
+            "#aec7e8",
+            "#ff7f0e",
+            "#2ca02c",
+            "#98df8a",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "useOldStyle": false,
+        "outputs": 1,
+        "x": 883.949951171875,
+        "y": 699.6666870117188,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "f2b35f71.8a15c8",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "値抽出",
+        "func": "var res=msg.payload;\nmsg.payload=res.volt;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 692.5666198730469,
+        "y": 585.566650390625,
+        "wires": [
+            [
+                "3db70350.d51764"
+            ]
+        ]
+    },
+    {
+        "id": "9430f996.d367e",
+        "type": "ui_button",
+        "z": "e29fa658.09f818",
+        "name": "",
+        "group": "ccff5b44.2d8488",
+        "order": 1,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "label": "クリア",
+        "tooltip": "",
+        "color": "",
+        "bgcolor": "",
+        "icon": "",
+        "payload": "[]",
+        "payloadType": "json",
+        "topic": "",
+        "x": 674.949951171875,
+        "y": 703.13330078125,
+        "wires": [
+            [
+                "3db70350.d51764"
+            ]
+        ]
+    },
+    {
+        "id": "a32ad433.364d28",
+        "type": "ui_switch",
+        "z": "e29fa658.09f818",
+        "name": "",
+        "label": "測定スタート/ストップ",
+        "tooltip": "",
+        "group": "ccff5b44.2d8488",
+        "order": 3,
+        "width": 0,
+        "height": 0,
+        "passthru": false,
+        "decouple": "false",
+        "topic": "",
+        "style": "",
+        "onvalue": "true",
+        "onvalueType": "bool",
+        "onicon": "",
+        "oncolor": "",
+        "offvalue": "false",
+        "offvalueType": "bool",
+        "officon": "",
+        "offcolor": "",
+        "x": 213.9500274658203,
+        "y": 703.566650390625,
+        "wires": [
+            [
+                "b3e0b70d.8d60c8"
+            ]
+        ]
+    },
+    {
+        "id": "7db14fa3.b7562",
+        "type": "inject",
+        "z": "e29fa658.09f818",
+        "name": "ADC値取得",
+        "topic": "1秒ごとトリガ",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "1",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 187.56666564941406,
+        "y": 574.566650390625,
+        "wires": [
+            [
+                "fbad9e2d.eee24"
+            ]
+        ]
+    },
+    {
+        "id": "fbad9e2d.eee24",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "フラグチェック",
+        "func": "var flg = global.get(\"flg\");\n\nif(flg===true)return msg;\nelse return;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 414.566650390625,
+        "y": 574.566650390625,
+        "wires": [
+            [
+                "36b1ee96.5dcb62"
+            ]
+        ]
+    },
+    {
+        "id": "b3e0b70d.8d60c8",
+        "type": "function",
+        "z": "e29fa658.09f818",
+        "name": "フラグ反映",
+        "func": "if(msg.payload===true)global.set(\"flg\",true);\nelse global.set(\"flg\",false);",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 431.56666564941406,
+        "y": 704.566650390625,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "7b1a2a97.73a96c",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM6",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "30",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    },
+    {
+        "id": "ccff5b44.2d8488",
+        "type": "ui_group",
+        "z": "",
+        "name": "AD変換",
+        "tab": "18a718d5.001c4f",
+        "order": 1,
+        "disp": false,
+        "width": "16",
+        "collapse": false
+    },
+    {
+        "id": "18a718d5.001c4f",
+        "type": "ui_tab",
+        "z": "",
+        "name": "新規",
+        "icon": "dashboard",
+        "order": 1,
+        "disabled": false,
+        "hidden": false
+    }
+]

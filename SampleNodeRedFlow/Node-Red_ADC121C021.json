@@ -1,0 +1,166 @@
+[
+    {
+        "id": "33f89dfa.2ef8aa",
+        "type": "tab",
+        "label": "フロー 6",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "e42f90c5.f1ba6",
+        "type": "function",
+        "z": "33f89dfa.2ef8aa",
+        "name": "値取得",
+        "func": "var buf = new Buffer(8); \n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr(0x50<<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//\nbuf[4]=0x53;//restart\nbuf[5]=0xA0+1;//i2c addr+1, write addr+1 = read addr, \nbuf[6]=0x2;//recieve data 2\nbuf[7]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;\n",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 389.566650390625,
+        "y": 299.99998474121094,
+        "wires": [
+            [
+                "7bf5636b.b112cc"
+            ]
+        ]
+    },
+    {
+        "id": "ba587c2b.ffdc58",
+        "type": "inject",
+        "z": "33f89dfa.2ef8aa",
+        "name": "ADC値取得",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 157.566650390625,
+        "y": 299.99998474121094,
+        "wires": [
+            [
+                "e42f90c5.f1ba6"
+            ]
+        ]
+    },
+    {
+        "id": "7bf5636b.b112cc",
+        "type": "serial request",
+        "z": "33f89dfa.2ef8aa",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 600.566650390625,
+        "y": 299.99998474121094,
+        "wires": [
+            [
+                "54a90020.5c7b78"
+            ]
+        ]
+    },
+    {
+        "id": "9af1c9fb.0ed998",
+        "type": "debug",
+        "z": "33f89dfa.2ef8aa",
+        "name": "結果",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 985.5666656494141,
+        "y": 298.99986267089844,
+        "wires": []
+    },
+    {
+        "id": "54a90020.5c7b78",
+        "type": "function",
+        "z": "33f89dfa.2ef8aa",
+        "name": "電圧値変換",
+        "func": "var res={raw:0,flg:\"\",volt:0.0};\n\n\nres.raw=((msg.payload[0]&0x0F)<<8)+msg.payload[1];\nres.volt=res.raw/4096.0*5.0;//Depends on USB Power Voltage\n\nres.volt = Math.round(res.volt*100)/100;\n\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 778.1333160400391,
+        "y": 299.99998474121094,
+        "wires": [
+            [
+                "9af1c9fb.0ed998"
+            ]
+        ]
+    },
+    {
+        "id": "ba887b88.e0694",
+        "type": "comment",
+        "z": "33f89dfa.2ef8aa",
+        "name": "Grove ADC ADC121C021",
+        "info": "",
+        "x": 164.56668090820312,
+        "y": 98,
+        "wires": []
+    },
+    {
+        "id": "d6493014.0a1458",
+        "type": "function",
+        "z": "33f89dfa.2ef8aa",
+        "name": "自動変換モード",
+        "func": "var buf = new Buffer(6); \n\nbuf[0]=0x53;//start\nbuf[1]=0xA0;//i2c addr(0x50<<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x02;//Select configuration register\nbuf[4]=0x20;//Automatic conversion mode enabled\nbuf[5]=0x50;//stop\n\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 380.56666564941406,
+        "y": 174,
+        "wires": [
+            [
+                "444dcc1.73dbeb4"
+            ]
+        ]
+    },
+    {
+        "id": "d5c369d9.e10758",
+        "type": "inject",
+        "z": "33f89dfa.2ef8aa",
+        "name": "初期化",
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "x": 145.56666564941406,
+        "y": 174,
+        "wires": [
+            [
+                "d6493014.0a1458"
+            ]
+        ]
+    },
+    {
+        "id": "444dcc1.73dbeb4",
+        "type": "serial out",
+        "z": "33f89dfa.2ef8aa",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 598.9499664306641,
+        "y": 173.5,
+        "wires": []
+    },
+    {
+        "id": "7b1a2a97.73a96c",
+        "type": "serial-port",
+        "z": "",
+        "serialport": "COM6",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "30",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": ""
+    }
+]
