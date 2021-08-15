@@ -1,4 +1,4 @@
-# USBSerial_I2C_Converter
+# USBシリアルI2C変換基板
 USB Serial I2C Converter
 
 ## 概要 
@@ -6,7 +6,7 @@ USB Serial I2C Converter
   * シリアルCOMポートを介してPCやRPI等からI2Cデバイスを制御できます  
   * I2Cデバイスの動作確認やラピッドプロトタイピングに最適です  
   * シリアルCOM変換にPL2303SA、シリアルI2C変換に[SC18IM700][1]を使用しています  
-  * TeratermやNode-Red、Unity等からシリアルCOMポートを介して容易なコマンドでI2Cデバイスを制御できます  
+  * TeratermやNode-Red、Unity、Python等からシリアルCOMポートを介して容易なコマンドでI2Cデバイスを制御できます  
   * I2CはGrove互換コネクタを搭載しています  
   * Grove互換コネクタの電源、プルアップ抵抗はスイッチ切り替えで5V/3.3Vに対応しています  
     ※USB、I2Cデバイスを接続する前に基板上のシルクを確認してから5V/3.3V切替してください  
