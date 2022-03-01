@@ -1,1 +1,311 @@
-[{"id":"ce5db291.a5489","type":"tab","label":"フロー 10","disabled":false,"info":""},{"id":"6f2aadfa.5dcf54","type":"debug","z":"ce5db291.a5489","name":"","active":true,"tosidebar":true,"console":false,"tostatus":false,"complete":"payload","targetType":"msg","x":1010.75,"y":626.5,"wires":[]},{"id":"58ec0932.7b5d8","type":"serial request","z":"ce5db291.a5489","name":"","serial":"7b1a2a97.73a96c","x":691.75,"y":381.25,"wires":[["46849b89.4ce42c"]]},{"id":"ee10d304.37c7e","type":"function","z":"ce5db291.a5489","name":"RTC読み込み","func":"var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x64;//i2c addr (0x32<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0x65;//i2c addr (0x32<1)+1, write addr+1 = read addr\nbuf[6]=0x07;//recieve data 7\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;","outputs":1,"noerr":0,"x":485.7665710449219,"y":364,"wires":[["58ec0932.7b5d8"]]},{"id":"ae3e03ec.963868","type":"inject","z":"ce5db291.a5489","name":"","topic":"時刻　読み込み","payload":"","payloadType":"str","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":261.8832702636719,"y":269.25,"wires":[["ee10d304.37c7e"]]},{"id":"46849b89.4ce42c","type":"function","z":"ce5db291.a5489","name":"受信データ数式変換","func":"var res={s:0,m:0,h:0,w:0,d:0,M:0,Y:0,str:\"\"};\nres.s=parseInt(msg.payload[0].toString(16));\nres.m=parseInt(msg.payload[1].toString(16));\nres.h=parseInt(msg.payload[2].toString(16));\nres.w=parseInt(msg.payload[3].toString(16));\nres.d=parseInt(msg.payload[4].toString(16));\nres.M=parseInt(msg.payload[5].toString(16));\nres.Y=parseInt(msg.payload[6].toString(16));\n\nvar week=\"\";\nif(res.w==1){\n    week=\"日\";\n}\nelse if(res.w==2){\n    week=\"月\";\n}\nelse if(res.w==4){\n    week=\"火\";\n}\nelse if(res.w==8){\n    week=\"水\";\n}\nelse if(res.w==16){\n    week=\"木\";\n}\nelse if(res.w==32){\n    week=\"金\";\n}\nelse if(res.w==64){\n    week=\"日\";\n}\nres.str= \"20\"+res.Y+\"/\"+res.M+\"/\"+res.d+\"(\"+ week +\") \"+res.h+\":\"+res.m+\":\"+res.s;\nmsg.payload=res;\nreturn msg;","outputs":1,"noerr":0,"x":820.63330078125,"y":511,"wires":[["6f2aadfa.5dcf54"]]},{"id":"9f3f8f50.312f78","type":"serial out","z":"ce5db291.a5489","name":"","serial":"7b1a2a97.73a96c","x":692.7499694824219,"y":687.25,"wires":[]},{"id":"95fa1964.3cb738","type":"inject","z":"ce5db291.a5489","name":"","topic":"時刻　書き込み","payload":"","payloadType":"str","repeat":"","crontab":"","once":false,"onceDelay":0.1,"x":229.63327026367188,"y":604,"wires":[["9ff95642.1be4e"]]},{"id":"9ff95642.1be4e","type":"function","z":"ce5db291.a5489","name":"RTC時刻書き込み","func":"var nowdate=new Date();\n\nvar year = nowdate.getFullYear();     // 年(4桁の西暦)\nvar mon  = nowdate.getMonth() + 1;    // 月(1～12)\nvar date = nowdate.getDate();         // 日(1～31)\nvar week = nowdate.getDay();          // 曜日(※0～6)\nvar hour = nowdate.getHours();        // 時(0～23)\nvar min  = nowdate.getMinutes();      // 分(0～59)\nvar sec  = nowdate.getSeconds();      // 秒(0～59)\n\nvar week_reg =Math.pow(2,week);\n\nvar buf = new Buffer(12); \nbuf[0]=0x53;//start\nbuf[1]=0x64;//i2c addr (0x32<1)\nbuf[2]=0x08;//send data 1\nbuf[3]=0x00;//offset 0\nbuf[4]=parseInt(sec, 16);\nbuf[5]=parseInt(min, 16);\nbuf[6]=parseInt(hour, 16);\nbuf[7]=parseInt(week_reg, 16);\nbuf[8]=parseInt(date, 16);\nbuf[9]=parseInt(mon, 16);\nbuf[10]=parseInt(year%1000, 16);\nbuf[11]=0x50;//stop\nmsg.payload = buf;\nreturn msg;","outputs":1,"noerr":0,"x":481.6332702636719,"y":608,"wires":[["6f2aadfa.5dcf54","9f3f8f50.312f78"]]},{"id":"542303a7.06532c","type":"comment","z":"ce5db291.a5489","name":"RV-8803-C7 RTCサンプル","info":"","x":296.6332702636719,"y":161,"wires":[]},{"id":"7b1a2a97.73a96c","type":"serial-port","z":"","serialport":"COM14","serialbaud":"9600","databits":"8","parity":"none","stopbits":"1","waitfor":"","dtr":"none","rts":"none","cts":"none","dsr":"none","newline":"30","bin":"bin","out":"time","addchar":"","responsetimeout":"2000"}]
+[
+    {
+        "id": "ce5db291.a5489",
+        "type": "tab",
+        "label": "フロー 10",
+        "disabled": false,
+        "info": ""
+    },
+    {
+        "id": "6f2aadfa.5dcf54",
+        "type": "debug",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1010.75,
+        "y": 626.5,
+        "wires": []
+    },
+    {
+        "id": "58ec0932.7b5d8",
+        "type": "serial request",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 691.75,
+        "y": 381.25,
+        "wires": [
+            [
+                "46849b89.4ce42c"
+            ]
+        ]
+    },
+    {
+        "id": "ee10d304.37c7e",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "RTC読み込み",
+        "func": "var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x64;//i2c addr (0x32<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x00;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0x65;//i2c addr (0x32<1)+1, write addr+1 = read addr\nbuf[6]=0x07;//recieve data 7\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 485.7665710449219,
+        "y": 364,
+        "wires": [
+            [
+                "58ec0932.7b5d8"
+            ]
+        ]
+    },
+    {
+        "id": "ae3e03ec.963868",
+        "type": "inject",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "時刻　読み込み",
+        "payload": "",
+        "payloadType": "str",
+        "x": 261.8832702636719,
+        "y": 269.25,
+        "wires": [
+            [
+                "ee10d304.37c7e"
+            ]
+        ]
+    },
+    {
+        "id": "46849b89.4ce42c",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "受信データ数式変換",
+        "func": "var res={s:0,m:0,h:0,w:0,d:0,M:0,Y:0,str:\"\"};\nres.s=parseInt(msg.payload[0].toString(16));\nres.m=parseInt(msg.payload[1].toString(16));\nres.h=parseInt(msg.payload[2].toString(16));\nres.w=parseInt(msg.payload[3].toString(16));\nres.d=parseInt(msg.payload[4].toString(16));\nres.M=parseInt(msg.payload[5].toString(16));\nres.Y=parseInt(msg.payload[6].toString(16));\n\nvar week=\"\";\nif(res.w==1){\n    week=\"日\";\n}\nelse if(res.w==2){\n    week=\"月\";\n}\nelse if(res.w==4){\n    week=\"火\";\n}\nelse if(res.w==8){\n    week=\"水\";\n}\nelse if(res.w==16){\n    week=\"木\";\n}\nelse if(res.w==32){\n    week=\"金\";\n}\nelse if(res.w==64){\n    week=\"日\";\n}\nres.str= \"20\"+res.Y+\"/\"+res.M+\"/\"+res.d+\"(\"+ week +\") \"+res.h+\":\"+res.m+\":\"+res.s;\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 820.63330078125,
+        "y": 511,
+        "wires": [
+            [
+                "6f2aadfa.5dcf54"
+            ]
+        ]
+    },
+    {
+        "id": "9f3f8f50.312f78",
+        "type": "serial out",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 692.7499694824219,
+        "y": 687.25,
+        "wires": []
+    },
+    {
+        "id": "95fa1964.3cb738",
+        "type": "inject",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "時刻　書き込み",
+        "payload": "",
+        "payloadType": "str",
+        "x": 229.63327026367188,
+        "y": 604,
+        "wires": [
+            [
+                "9ff95642.1be4e"
+            ]
+        ]
+    },
+    {
+        "id": "9ff95642.1be4e",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "RTC時刻書き込み",
+        "func": "var nowdate=new Date();\n\nvar year = nowdate.getFullYear();     // 年(4桁の西暦)\nvar mon  = nowdate.getMonth() + 1;    // 月(1～12)\nvar date = nowdate.getDate();         // 日(1～31)\nvar week = nowdate.getDay();          // 曜日(※0～6)\nvar hour = nowdate.getHours();        // 時(0～23)\nvar min  = nowdate.getMinutes();      // 分(0～59)\nvar sec  = nowdate.getSeconds();      // 秒(0～59)\n\nvar week_reg =Math.pow(2,week);\n\nvar buf = new Buffer(12); \nbuf[0]=0x53;//start\nbuf[1]=0x64;//i2c addr (0x32<1)\nbuf[2]=0x08;//send data 1\nbuf[3]=0x00;//offset 0\nbuf[4]=parseInt(sec, 16);\nbuf[5]=parseInt(min, 16);\nbuf[6]=parseInt(hour, 16);\nbuf[7]=parseInt(week_reg, 16);\nbuf[8]=parseInt(date, 16);\nbuf[9]=parseInt(mon, 16);\nbuf[10]=parseInt(year%1000, 16);\nbuf[11]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "x": 481.6332702636719,
+        "y": 608,
+        "wires": [
+            [
+                "6f2aadfa.5dcf54",
+                "9f3f8f50.312f78"
+            ]
+        ]
+    },
+    {
+        "id": "542303a7.06532c",
+        "type": "comment",
+        "z": "ce5db291.a5489",
+        "name": "RV-8803-C7 RTCサンプル",
+        "info": "",
+        "x": 296.6332702636719,
+        "y": 161,
+        "wires": []
+    },
+    {
+        "id": "de272eb1caa2c41e",
+        "type": "serial out",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 1160,
+        "y": 180,
+        "wires": []
+    },
+    {
+        "id": "bec3bcf906e0284e",
+        "type": "inject",
+        "z": "ce5db291.a5489",
+        "name": "FlagRegクリア書き込み",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "str",
+        "x": 690,
+        "y": 180,
+        "wires": [
+            [
+                "5d433e1d2f0560a1"
+            ]
+        ]
+    },
+    {
+        "id": "5d433e1d2f0560a1",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "RTC書き込み",
+        "func": "\nif(msg.payload!=\"RTC OK\")\n{\n    var buf = new Buffer(6); \n    buf[0]=0x53;//start\n    buf[1]=0x64;//i2c addr (0x32<1)\n    buf[2]=0x02;//send data 1\n    buf[3]=0x0E;//offset E\n    buf[4]=0x00;//offset Reg = 0\n    buf[5]=0x50;//stop\n    msg.payload = buf;\n    return msg;\n}\nelse \n    return null;\n\n",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 938.88330078125,
+        "y": 180.75,
+        "wires": [
+            [
+                "de272eb1caa2c41e"
+            ]
+        ]
+    },
+    {
+        "id": "5d6c8ba1e2217b7b",
+        "type": "serial request",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "serial": "7b1a2a97.73a96c",
+        "x": 1160,
+        "y": 100,
+        "wires": [
+            [
+                "185e7a1a08bf833d"
+            ]
+        ]
+    },
+    {
+        "id": "b67645e973358740",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "RTC読み込み",
+        "func": "var buf = new Buffer(8); \nbuf[0]=0x53;//start\nbuf[1]=0x64;//i2c addr (0x32<1)\nbuf[2]=0x01;//send data 1\nbuf[3]=0x0E;//offset 0\nbuf[4]=0x53;//restart\nbuf[5]=0x65;//i2c addr (0x32<1)+1, write addr+1 = read addr\nbuf[6]=0x01;//recieve data 1\nbuf[7]=0x50;//stop\nmsg.payload = buf;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 940,
+        "y": 100,
+        "wires": [
+            [
+                "5d6c8ba1e2217b7b"
+            ]
+        ]
+    },
+    {
+        "id": "531ff63b68c7b557",
+        "type": "inject",
+        "z": "ce5db291.a5489",
+        "name": "FlagReg読み込み",
+        "props": [
+            {
+                "p": "payload"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payloadType": "str",
+        "x": 670,
+        "y": 100,
+        "wires": [
+            [
+                "b67645e973358740"
+            ]
+        ]
+    },
+    {
+        "id": "c526346a30b85d8d",
+        "type": "debug",
+        "z": "ce5db291.a5489",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "x": 1580,
+        "y": 100,
+        "wires": []
+    },
+    {
+        "id": "185e7a1a08bf833d",
+        "type": "function",
+        "z": "ce5db291.a5489",
+        "name": "受信データ数式変換",
+        "func": "var res=\"RTC OK\";\nif(msg.payload[0]!=0)\n    res=\"RTC was cleard. Battery voltage was low.\"\nmsg.payload=res;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1360,
+        "y": 100,
+        "wires": [
+            [
+                "c526346a30b85d8d",
+                "5d433e1d2f0560a1"
+            ]
+        ]
+    },
+    {
+        "id": "7b1a2a97.73a96c",
+        "type": "serial-port",
+        "serialport": "COM14",
+        "serialbaud": "9600",
+        "databits": "8",
+        "parity": "none",
+        "stopbits": "1",
+        "waitfor": "",
+        "dtr": "none",
+        "rts": "none",
+        "cts": "none",
+        "dsr": "none",
+        "newline": "30",
+        "bin": "bin",
+        "out": "time",
+        "addchar": "",
+        "responsetimeout": "2000"
+    }
+]
