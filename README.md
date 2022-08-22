@@ -48,8 +48,8 @@ USB Serial I2C Converter
  ※上記写真は試作基板のため、量産版と異なる場合があります  
    
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
-[2]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=225&pcid=41
-[3]: http://www.prolific.com.tw/US/ShowProduct.aspx?p_id=229&pcid=41
+[2]: https://www.prolific.com.tw/UserFiles/files/PL23XX_Prolific_DriverInstaller_v408.zip
+[3]: https://www.prolific.com.tw/UserFiles/files/PL2303HXD_G_Mac%20Driver_v2_1_0_20210311.zip
 [4]: https://github.com/meerstern/USBSerial_I2C_Converter/tree/master/SampleNodeRedFlow
 [5]: https://www.switch-science.com/catalog/2853/
 [6]: http://meerstern.seesaa.net/article/465007276.html
