@@ -24,7 +24,7 @@ USB Serial I2C Converter
 ## USBドライバ
  * Windows版は[こちらからダウンロード][2]して使用してください  
  ※標準ドライバではNode-Redで動作不具合があるため、最新のドライバに更新し、再起動後に使用してください
- * Mac版は[こちらからダウンロード][3]して使用してください  
+ * Mac版は標準でドライバが読み込まれますが、必要に応じて[こちらからダウンロード][3]して使用してください  
  * Linux版はKernel 2.4.31以降、標準でドライバが組み込まれています  
 
 ## Node-Redサンプルフロー
@@ -37,6 +37,11 @@ USB Serial I2C Converter
 
 ## Teratermサンプルマクロ
  * サンプルマクロを実行する際には必ず言語設定を「English」、「Default.lng」に設定してください。正しく送受信されません。  
+
+## WebシリアルAPIツール
+ * WebシリアルAPIを使用した[ツールを公開][9]しています  
+ * EdgeもしくはChromeブラウザからアクセスすると簡単にI2Cデバイスと通信できます  
+ * 対応デバイスは随時追加予定です  
 
 
 ## 変換基板
@@ -55,5 +60,6 @@ USB Serial I2C Converter
 [6]: http://meerstern.seesaa.net/article/465007276.html
 [7]: https://www.switch-science.com/catalog/796/
 [8]: https://www.nxp.com/docs/en/data-sheet/SC18IM700.pdf
+[9]: https://meerstern.github.io/
 
 MIT Lisense
