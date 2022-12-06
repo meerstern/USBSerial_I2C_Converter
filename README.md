@@ -51,7 +51,10 @@ USB Serial I2C Converter
 <img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/img2.jpg" width="360">
  
  ※上記写真は試作基板のため、量産版と異なる場合があります  
-   
+ 
+ ## 販売サイト
+  * [スイッチサイエンス][10]
+ 
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
 [2]: https://www.prolific.com.tw/UserFiles/files/PL23XX_Prolific_DriverInstaller_v408.zip
 [3]: https://www.prolific.com.tw/UserFiles/files/PL2303HXD_G_Mac%20Driver_v2_1_0_20210311.zip
@@ -61,5 +64,6 @@ USB Serial I2C Converter
 [7]: https://www.switch-science.com/catalog/796/
 [8]: https://www.nxp.com/docs/en/data-sheet/SC18IM700.pdf
 [9]: https://meerstern.github.io/
+[10]: https://www.switch-science.com/products/6214
 
 MIT Lisense
