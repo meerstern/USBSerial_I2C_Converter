@@ -56,7 +56,7 @@ USB Serial I2C Converter
   * [スイッチサイエンス][10]
   
  ## 告知
-  * SC18IM700、PL2303SAは生産完了のため、23年秋(予定)以降はそれぞれ後継機種のSC18IM704、PL2303GLを使用したv2.x基板に変更を予定しています  
+  * SC18IM700、PL2303SAは生産完了のため、23年7月以降はそれぞれ後継機種のSC18IM704、PL2303GLを使用したv2.x基板に変更します
 
  
 [1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
