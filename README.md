@@ -5,7 +5,8 @@ USB Serial I2C Converter
   * USBシリアルをI2Cマスタに変換する基板です
   * シリアルCOMポートを介してPCやRPI等からI2Cデバイスを制御できます  
   * I2Cデバイスの動作確認やラピッドプロトタイピングに最適です  
-  * シリアルCOM変換にPL2303SA、シリアルI2C変換に[SC18IM700][1]を使用しています  
+  * シリアルCOM変換にPL2303GL、シリアルI2C変換に[SC18IM704][1]を使用しています(V2：現行モデル)  
+  * シリアルCOM変換にPL2303SA、シリアルI2C変換にSC18IM700を使用しています(V1：旧モデル)  
   * TeratermやNode-Red、Unity、Python等からシリアルCOMポートを介して容易なコマンドでI2Cデバイスを制御できます  
   * I2CはGrove互換コネクタを搭載しています  
   * Grove互換コネクタの電源、プルアップ抵抗はスイッチ切り替えで5V/3.3Vに対応しています  
@@ -14,10 +15,10 @@ USB Serial I2C Converter
 
 
 ## 詳細 
- * シリアルI2C変換SC18IM700のコマンドは[データシート(PDF)][8]を参照してください  
- * シリアルI2C変換[SC18IM700][1]のデフォルトボーレートは9600bpsです  
+ * シリアルI2C変換SC18IM700/SC18IM704のコマンドは[データシート(PDF)][8]を参照してください  
+ * シリアルI2C変換[SC18IM700/SC18IM704][1]のデフォルトボーレートは9600bpsです  
  * アドレスの異なる複数のデバイスを接続する場合は[I2Cハブ][7]を使用してください
- * 基板のピンヘッダを用いることでSC18IM700単体の変換基板としても使用できます  
+ * 基板のピンヘッダを用いることでSC18IM700/SC18IM704単体の変換基板としても使用できます  
  * USB5V電源入力側に350mA定格のリセッタブルヒューズを搭載しています  
  * 給電可能な電流は3.3Vラインで最大150mA前後、5Vラインで最大350mAです  
 
@@ -56,17 +57,18 @@ USB Serial I2C Converter
   * [スイッチサイエンス][10]
   
  ## 告知
-  * SC18IM700、PL2303SAは生産完了のため、23年7月以降はそれぞれ後継機種のSC18IM704、PL2303GLを使用したv2.x基板に変更します
-
+  * SC18IM700、PL2303SAは生産完了のため、23年7月以降はそれぞれ後継機種のSC18IM704、PL2303GLを使用したv2.x基板に変更しました
+　* SC18IM700/SC18IM704の基本的なI2Cコマンド等は互換性が維持されています
+  * 生産完了に伴い、v1.xモデルの製造及び販売は終了しました  
  
-[1]: https://www.nxp.com/products/peripherals-and-logic/signal-chain/bridges/master-ic-bus-controller-with-uart-interface:SC18IM700IPW
+[1]: https://www.nxp.jp/part/SC18IM704PW#/
 [2]: https://www.prolific.com.tw/UserFiles/files/PL23XX_Prolific_DriverInstaller_v408.zip
 [3]: https://www.prolific.com.tw/UserFiles/files/PL2303HXD_G_Mac%20Driver_v2_1_0_20210311.zip
 [4]: https://github.com/meerstern/USBSerial_I2C_Converter/tree/master/SampleNodeRedFlow
 [5]: https://www.switch-science.com/catalog/2853/
 [6]: http://meerstern.seesaa.net/article/465007276.html
 [7]: https://www.switch-science.com/catalog/796/
-[8]: https://www.nxp.com/docs/en/data-sheet/SC18IM700.pdf
+[8]: https://www.nxp.jp/docs/en/data-sheet/SC18IM704.pdf
 [9]: https://meerstern.github.io/
 [10]: https://www.switch-science.com/products/6214
 
