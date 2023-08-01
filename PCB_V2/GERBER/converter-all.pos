@@ -1,0 +1,29 @@
+### Module positions - created on 2022/09/21 22:05:47 ###
+### Printed by Pcbnew version kicad (5.1.2)-1
+## Unit = mm, Angle = deg.
+## Side : All
+# Ref     Val                              Package                        PosX       PosY       Rot  Side
+C1        0.1u                             C_0603_1608Metric         -101.9240  -141.4780  270.0000  bottom
+C2        0.1u                             C_0603_1608Metric         -114.3000  -142.5700  270.0000  bottom
+R1        27                               R_0603_1608Metric         -110.2880  -146.5160    0.0000  bottom
+R3        27                               R_0603_1608Metric         -105.6880  -146.5160    0.0000  bottom
+R4        27                               R_0603_1608Metric         -110.0620  -135.4540  270.0000  bottom
+R5        27                               R_0603_1608Metric         -106.4620  -135.4420  270.0000  bottom
+R6        1.5k                             R_0603_1608Metric         -108.2620  -135.4420  270.0000  bottom
+R10       10k                              R_0603_1608Metric         -101.8600  -146.3620   90.0000  bottom
+U2        PL2303SA                         SOIC-8_3.9x4.9mm_P1.27mm  -108.4580  -141.2240    0.0000  bottom
+C4        0.1u                             C_0603_1608Metric          114.3000  -143.4880   90.0000  top
+C10       10u                              C_0805_2012Metric          102.0540  -136.1080  270.0000  top
+C11       0.01u                            C_0603_1608Metric          107.0420  -138.8460    0.0000  top
+C12       10u                              C_0805_2012Metric          108.2540  -136.2080  270.0000  top
+D1        LED                              LED_0603_1608Metric        101.8000  -129.2880   90.0000  top
+M1        MICRO-USB-ZX62R-B-5P-con-hirose  CONN-10118194-0001LF-FCI   108.0000  -128.0000  180.0000  top
+PT1       femtoSMDC035F-02_                R_0603_1608Metric          114.1000  -131.0880   90.0000  top
+R2        1k                               R_0603_1608Metric          101.8000  -132.4880  270.0000  top
+R7        10k                              R_0603_1608Metric          101.9240  -141.8220  270.0000  top
+R8        4.7k                             R_0603_1608Metric          101.8540  -149.3520   90.0000  top
+R9        4.7k                             R_0603_1608Metric          114.0460  -149.3260   90.0000  top
+SW1       SW_SPDT                          DPDT_SMD                   110.8000  -139.0000   90.0000  top
+U1        LD3985M33R                       SOT-23-5                   105.1540  -136.1460    0.0000  top
+U3        SC18IM704                        TSSOP-16_4.4x5mm_P0.65mm   107.9500  -144.0180    0.0000  top
+## End

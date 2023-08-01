@@ -1,0 +1,6 @@
+(sym_lib_table
+  (lib (name PL2303SA)(type Legacy)(uri ${KIPRJMOD}/PL2303SA.lib)(options "")(descr ""))
+  (lib (name ld3985m122r)(type Legacy)(uri ${KIPRJMOD}/ld3985m122r.lib)(options "")(descr ""))
+  (lib (name micro-usb-zx62r-b-5p-con-hirose)(type Legacy)(uri ${KIPRJMOD}/micro-usb-zx62r-b-5p-con-hirose.lib)(options "")(descr ""))
+  (lib (name SC18IM700)(type Legacy)(uri ${KIPRJMOD}/SC18IM700.lib)(options "")(descr ""))
+)
