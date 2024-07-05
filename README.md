@@ -104,7 +104,7 @@ USB Serial I2C Converter
 
  
 ## Web Serial API Tools
- * [Publishing tools][9] using Web Serial API
+ * [Publishing tools][11] using Web Serial API
  * Easily communicate with I2C devices when accessed from Edge or Chrome browsers
  * Compatible devices will be added
 
@@ -124,5 +124,6 @@ USB Serial I2C Converter
 [8]: https://www.nxp.jp/docs/en/data-sheet/SC18IM704.pdf
 [9]: https://meerstern.github.io/
 [10]: https://www.switch-science.com/products/6214
+[11]: https://meerstern.github.io/Web%20API%20Tools_En.html
 
 MIT Lisense
