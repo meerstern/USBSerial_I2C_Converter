@@ -61,6 +61,58 @@ USB Serial I2C Converter
   * SC18IM700、PL2303SAは生産完了のため、23年7月以降はそれぞれ後継機種のSC18IM704、PL2303GLを使用したv2.x基板に変更しました
   * SC18IM700/SC18IM704の基本的なI2Cコマンド等は互換性が維持されています
   * 生産完了に伴い、v1.xモデルの製造及び販売は終了しました  
+
+
+# USB Serial I2C Converter
+## Overview 
+
+  * This is a board that converts USB serial to I2C master.
+  * Can control I2C devices from PC, RPI, etc. via serial COM port
+  * Ideal for I2C device operation verification and rapid prototyping
+  * PL2303GL is used for serial COM conversion, and [SC18IM704][1] is used for serial I2C conversion (V2: current model)
+  * Control I2C devices with easy commands via serial COM port from Teraterm, Node-Red, Unity, Python, etc.
+  * I2C has Grove compatible connector  
+  * Grove compatible connector power supply and pull-up resistor support 5V/3.3V by switching
+  * Before connecting USB or I2C devices, please check the silk on the board and then switch 5V/3.3V.
+  * Please be careful not to apply 5V to 3.3V only devices.
+
+## Details 
+  * For serial I2C conversion SC18IM700/SC18IM704 commands, please refer to [Datasheet (PDF)][8]
+  * The default baud rate for serial I2C conversion [SC18IM700/SC18IM704][1] is 9600bps
+  * When connecting multiple devices with different addresses, please use [I2C hub][7]
+  * Can also be used as a conversion board for SC18IM700/SC18IM704 by using the pin header on the board
+  * Equipped with a resettable fuse rated at 350mA on the USB5V power input side
+  * The maximum current that can be supplied is around 150mA for 3.3V line, and 350mA for 5V line.
+  * If there is no response to the command, short the RST pin and GND pin with tweezers for about 1 second to reset.
+
+  ## USB Driver
+  * For Windows version, please [download][2] from here.
+  * The standard driver has a malfunction with Node-Red, so please update to the latest driver and use it after restarting.
+  * The driver is loaded by default in the Mac version, but if necessary, please [download][3].
+  * The Linux version has a built-in driver as standard since Kernel 2.4.31 
+
+ ## Node-Red Sample Flow
+  * Read temperature and humidity from [Grove temperature and humidity sensor SHT31][5] using serial port flow [sample][4]
+  * Temperature and humidity sensor SHT31, I2C connection LCD AQM1602, multi-environment sensor BME280, CO2 sensor CCS811, real-time clock DS1307, AD conversion MCP3425, particle sensor HM3301, infrared grid sensor AMG8833, sample code for I2C device search is available
+  * Please check the sample code for details.
+  * If you want to use serial port flow, you need to use the on-premises version of Node-Red. Please refer to [this article(Japanese)][6]
+ 
+<img src="https://raw.githubusercontent.com/meerstern/USBSerial_I2C_Converter/master/SampleNodeRedFlow/Node-Red_SHT31.jpg" width="360">
+
+## Teraterm Sample Macro
+ * When running the sample macro, be sure to set the language settings to "English" and "Default.lng". It will not be sent or received correctly.
+
+ 
+## Web Serial API Tools
+ * [Publishing tools][9] using Web Serial API
+ * Easily communicate with I2C devices when accessed from Edge or Chrome browsers
+ * Compatible devices will be added
+
+ ## Announcement
+  * Production of SC18IM700 and PL2303SA has been discontinued, so from July 2023 onwards, we have changed to v2.x boards using the successor models SC18IM704 and PL2303GL, respectively.
+  * Compatibility of basic I2C commands etc. of SC18IM700/SC18IM704 is maintained.
+  * Due to the completion of production, the manufacture and sale of v1.x model has ended.
+  
  
 [1]: https://www.nxp.jp/part/SC18IM704PW#/
 [2]: https://www.prolific.com.tw/UserFiles/files/PL23XX_Prolific_DriverInstaller_v408.zip
